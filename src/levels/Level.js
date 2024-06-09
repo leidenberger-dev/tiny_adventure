@@ -8,9 +8,4 @@ export class Level {
     this.map.src = levelSettings.map;
     this.background = levelSettings.background;
   }
-
-  render() {
-    const render = new Renderer();
-    render.draw();
-  }
 }

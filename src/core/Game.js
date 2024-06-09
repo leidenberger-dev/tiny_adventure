@@ -1,21 +1,22 @@
 import { Level1 } from "../levels/Level1.js";
 import { Player, boy } from "../objects/Player.js";
+import { Renderer } from "./Renderer.js";
 
 export class Game {
   boy = boy;
   constructor() {
-    this.player = new Player(boy);
+    this.level = new Level1();
+    this.renderer = new Renderer(this.level);
   }
 
   start() {
-    this.player.img.onload = () => {
+    setTimeout(() => {
       this.gameLoop();
-    };
+    }, 1000);
   }
 
   gameLoop = () => {
-    const level1 = new Level1();
-    level1.render();
+    this.renderer.draw();
     requestAnimationFrame(this.gameLoop);
   };
 }

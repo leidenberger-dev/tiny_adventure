@@ -1,4 +1,5 @@
 import { MoveableObject } from "./MoveableObject.js";
+import { handleInput } from "../core/inputHandler.js";
 
 export const boy = {
   img: "../assets/img/boy.png",
@@ -10,4 +11,10 @@ export const boy = {
   frameHeight: 250,
 };
 
-export class Player extends MoveableObject {}
+export class Player extends MoveableObject {
+  input = handleInput;
+  constructor(sprite) {
+    super(sprite);
+    this.input();
+  }
+}
