@@ -1,5 +1,5 @@
-import { boy, Player } from "../objects/Player.js";
-import { Renderer } from "../core/Renderer.js";
+import { Player } from "../objects/Player.js";
+import { boy } from "../objects/sprites.js";
 
 export class Level {
   constructor(levelSettings) {
