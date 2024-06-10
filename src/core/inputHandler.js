@@ -5,6 +5,7 @@ export const handleInput = function () {
     switch (e.key) {
       case pressedKey.up:
         this.position.y -= this.speed;
+        this.log();
         break;
       case pressedKey.down:
         this.position.y += this.speed;

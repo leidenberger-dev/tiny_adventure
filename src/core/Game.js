@@ -1,4 +1,4 @@
-import { Level1 } from "../levels/Level1.js";
+import { Level1 } from "../levels/level1/Level1.js";
 import { Renderer } from "./Renderer.js";
 
 export class Game {
