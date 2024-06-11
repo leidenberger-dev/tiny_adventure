@@ -1,5 +1,3 @@
-import { canvas } from "../config/canvas.js";
-
 export const boy = {
   img: "../assets/img/boy.png",
   position: {

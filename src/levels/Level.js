@@ -1,8 +1,10 @@
 import { Player } from "../objects/Player.js";
 import { boy } from "../objects/sprites.js";
 import { ctx } from "../config/canvas.js";
+import { MapData } from "./MapData.js";
 
 export class Level {
+  devMode = false;
   constructor(levelSettings) {
     this.player = new Player(boy);
     this.map = new Image();
@@ -11,13 +13,14 @@ export class Level {
     this.background.src = levelSettings.background;
     this.startPoint = levelSettings.startPoint;
     this.player.position = this.startPoint;
+    this.mapJson = levelSettings.mapJson;
+    this.mapData = new MapData(levelSettings);
   }
 
   draw() {
-    const parallax = 0.15; // Ändern Sie diesen Wert, um den Parallaxeneffekt zu steuern
+    const parallax = 0.15;
     const bgX = this.player.position.x * parallax;
 
-    // Zeichnen Sie das Hintergrundbild dreimal: einmal links, einmal in der Mitte und einmal rechts
     ctx.drawImage(
       this.background,
       -bgX - this.map.width,
@@ -40,7 +43,18 @@ export class Level {
       this.map.height + this.player.jumpHeight
     );
 
-    // Zeichnen Sie die Karte normal
     ctx.drawImage(this.map, 0, this.player.jumpHeight);
+
+    if (this.devMode) {
+      this.mapData.drawCollisionLayer(this.player.jumpHeight);
+    }
+  }
+
+  setDevModeTrue() {
+    if (!this.devMode) {
+      this.devMode = true;
+    } else {
+      this.devMode = false;
+    }
   }
 }

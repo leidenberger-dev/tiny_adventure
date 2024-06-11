@@ -6,9 +6,5 @@ export class Player extends MoveableObject {
   constructor(sprite) {
     super(sprite);
     this.input();
-
-    this.log = () => {
-      console.log(this.position.y);
-    };
   }
 }

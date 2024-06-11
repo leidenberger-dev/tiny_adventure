@@ -17,4 +17,8 @@ export class Game {
     this.renderer.draw();
     requestAnimationFrame(this.gameLoop);
   };
+
+  devMode() {
+    this.level.setDevModeTrue();
+  }
 }
