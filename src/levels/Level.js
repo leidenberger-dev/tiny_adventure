@@ -21,6 +21,7 @@ export class Level {
 
   update() {
     this.gravity.applyGravity();
+    this.player.update();
   }
 
   draw() {

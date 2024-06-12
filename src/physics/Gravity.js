@@ -4,14 +4,15 @@ export class Gravity {
   constructor(player, mapData) {
     this.player = player;
     this.mapData = mapData;
-    this.gravityStrength = 1;
+    this.gravityStrength = 4;
     this.collisionDetector();
   }
 
   applyGravity() {
     this.collisionDetector.detectCollision();
-    if (!this.collisionDetector.detection) {
+    if (!this.player.isOnGround && this.player.isFalling) {
       this.player.position.y += this.gravityStrength;
+      this.player.isFalling = false;
     }
   }
 

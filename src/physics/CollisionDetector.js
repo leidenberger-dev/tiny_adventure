@@ -6,7 +6,7 @@ export class CollisionDetector {
   }
 
   detectCollision() {
-    this.detection = false;
+    this.player.isOnGround = false;
     const {
       position,
       frameWidth,
@@ -28,7 +28,7 @@ export class CollisionDetector {
 
     for (let i = 0; i < collisionData.length; i++) {
       if (collisionData[i] !== 0) {
-        const collisionOffset = 20;
+        const collisionOffset = 30;
         const tileX = (i % mapWidth) * tileWidth;
         const tileY =
           Math.floor(i / mapWidth) * tileHeight + jumpHeight - collisionOffset;
@@ -42,7 +42,7 @@ export class CollisionDetector {
 
         if (this.isCollisionFromAbove(playerBounds, tileBounds)) {
           console.log("Collision detected from above");
-          this.detection = true;
+          this.player.isOnGround = true;
         }
       }
     }
