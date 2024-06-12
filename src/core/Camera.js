@@ -9,13 +9,14 @@ export class Camera {
   }
 
   update() {
-    // zentriert die Kamera auf den Player
-    this.x =
-      this.player.position.x - canvas.width / 2 + this.player.frameWidth / 2;
-    this.y =
-      this.player.position.y -
-      canvas.height / 2 +
-      this.player.frameHeight / 2 -
-      this.tileHeight / 2;
+    if (this.player.position.y < 1350) {
+      this.x =
+        this.player.position.x - canvas.width / 2 + this.player.frameWidth / 2;
+      this.y =
+        this.player.position.y -
+        canvas.height / 2 +
+        this.player.frameHeight / 2 -
+        this.tileHeight / 2;
+    }
   }
 }

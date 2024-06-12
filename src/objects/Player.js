@@ -1,20 +1,22 @@
 import { MoveableObject } from "./MoveableObject.js";
 import { handleInput } from "../core/inputHandler.js";
 import { pressedKeys } from "../config/keys.js";
+
 export class Player extends MoveableObject {
-  input = handleInput;
-  jumpHeight = 300;
-  speed = 8;
-  jumpSpeed = null;
-  canJump = true;
-  fallSpeed = 0.4;
-  jumpAcceleration = 0.6;
-  fallAcceleration = 0.5;
-  totalJump = 300;
-  isOnGround = true;
-  isFalling = false;
   constructor(sprite) {
     super(sprite);
+    this.input = handleInput;
+    this.jumpHeight = 300;
+    this.speed = 8;
+    this.jumpSpeed = null;
+    this.canJump = true;
+    this.fallSpeed = 0.4;
+    this.jumpAcceleration = 0.6;
+    this.fallAcceleration = 0.5;
+    this.totalJump = 300;
+    this.isOnGround = true;
+    this.isFalling = false;
+    this.isAttacking = false;
     this.input();
   }
 
@@ -27,7 +29,7 @@ export class Player extends MoveableObject {
     }
   }
 
-  update() {
+  handleMovement() {
     if (pressedKeys.up && this.canJump) {
       this.jump();
       this.canJump = false;
@@ -45,9 +47,18 @@ export class Player extends MoveableObject {
     if (pressedKeys.right) {
       this.moveRight();
     }
+  }
 
+  handleAttackAnimation() {
+    if (this.isAttacking && this.column >= this.maxColumns) {
+      this.isAttacking = false;
+      this.column = 0;
+    }
+  }
+
+  handleJumpAndFall() {
     if (this.totalJump < this.jumpHeight) {
-      this.position.y -= this.jumpSpeed; // Bewegen Sie den Spieler nach oben basierend auf der Sprunggeschwindigkeit
+      this.position.y -= this.jumpSpeed;
       this.jumpSpeed -= this.jumpAcceleration;
       this.totalJump += this.jumpSpeed;
     } else {
@@ -60,12 +71,24 @@ export class Player extends MoveableObject {
       } else {
         this.isFalling = false;
         this.isJumping = false;
-        if (pressedKeys.right || pressedKeys.left) {
-          this.animation(this.sprite.walking);
-        } else {
-          this.animation(this.sprite.idle); // Setzen Sie das Sprite auf 'idle', wenn der Spieler auf dem Boden ist und sich nicht bewegt
-        }
+        this.handleIdleAndWalkingAnimations();
       }
     }
+  }
+
+  handleIdleAndWalkingAnimations() {
+    if (pressedKeys.right || pressedKeys.left) {
+      this.animation(this.sprite.walking);
+    } else if (pressedKeys.attack) {
+      this.animation(this.sprite.attack);
+    } else {
+      this.animation(this.sprite.idle);
+    }
+  }
+
+  update() {
+    this.handleMovement();
+    this.handleAttackAnimation();
+    this.handleJumpAndFall();
   }
 }

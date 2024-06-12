@@ -42,9 +42,11 @@ export class Level {
   draw() {
     this.update();
 
-    if (this.isHtmlCollected) {
+    if (this.isCssCollected) {
       this.drawBackground();
+    }
 
+    if (this.isHtmlCollected) {
       ctx.drawImage(this.map, 0, this.player.jumpHeight);
     }
 

@@ -3,6 +3,7 @@ export const keys = {
   down: "s",
   left: "a",
   right: "d",
+  attack: "q",
 };
 
 export const pressedKeys = {
@@ -10,4 +11,5 @@ export const pressedKeys = {
   down: false,
   left: false,
   right: false,
+  attack: false,
 };
