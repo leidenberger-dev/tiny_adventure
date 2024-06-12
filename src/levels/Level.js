@@ -2,9 +2,10 @@ import { Player } from "../objects/Player.js";
 import { boy } from "../objects/sprites.js";
 import { ctx } from "../config/canvas.js";
 import { MapData } from "./MapData.js";
+import { Gravity } from "../physics/Gravity.js";
 
 export class Level {
-  devMode = false;
+  devMode = true;
   constructor(levelSettings) {
     this.player = new Player(boy);
     this.map = new Image();
@@ -15,11 +16,18 @@ export class Level {
     this.player.position = this.startPoint;
     this.mapJson = levelSettings.mapJson;
     this.mapData = new MapData(levelSettings);
+    this.gravity = new Gravity(this.player, this.mapData);
+  }
+
+  update() {
+    this.gravity.applyGravity();
   }
 
   draw() {
     const parallax = 0.15;
     const bgX = this.player.position.x * parallax;
+
+    this.update();
 
     ctx.drawImage(
       this.background,
@@ -47,6 +55,8 @@ export class Level {
 
     if (this.devMode) {
       this.mapData.drawCollisionLayer(this.player.jumpHeight);
+      this.player.imageRectangle();
+      this.player.imageCollisionRectangle();
     }
   }
 

@@ -2,8 +2,8 @@ import { ctx } from "../config/canvas.js";
 
 export class MapData {
   constructor(levelSettings) {
-    this.collissionBlock = new Image();
-    this.collissionBlock.src = "./assets/img/collisionblock.png";
+    this.collisionBlock = new Image();
+    this.collisionBlock.src = "./assets/img/collisionblock.png";
     this.mapJson = levelSettings.mapJson;
     this.loadJson();
   }
@@ -37,7 +37,7 @@ export class MapData {
         const x = (i % this.mapWidth) * this.tileWidth;
         const y = Math.floor(i / this.mapWidth) * this.tileHeight + jumpHeight;
         ctx.drawImage(
-          this.collissionBlock,
+          this.collisionBlock,
           x,
           y,
           this.tileWidth,
