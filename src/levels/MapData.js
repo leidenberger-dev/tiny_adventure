@@ -1,9 +1,16 @@
 import { ctx } from "../config/canvas.js";
 
 export class MapData {
-  constructor(levelSettings) {
+  constructor(levelSettings, collisionDetector) {
+    this.collisionDetector = collisionDetector;
     this.collisionBlock = new Image();
     this.collisionBlock.src = "./assets/img/collisionblock.png";
+    this.css = new Image();
+    this.css.src = "./assets/img/css.png";
+    this.html = new Image();
+    this.html.src = "./assets/img/html.png";
+    this.javascript = new Image();
+    this.javascript.src = "./assets/img/javascript.png";
     this.mapJson = levelSettings.mapJson;
     this.loadJson();
   }
@@ -11,18 +18,21 @@ export class MapData {
     try {
       const response = await fetch(this.mapJson);
       const mapData = await response.json();
-      this.initializeCollisionLayer(mapData);
+      this.initializeLayers(mapData);
       this.drawCollisionLayer();
+      this.drawItemsLayer();
     } catch (error) {
       console.error("Error loading mapData", error);
     }
   }
 
-  initializeCollisionLayer(mapData) {
+  initializeLayers(mapData) {
     const collisionLayer = mapData.layers.find(
       (layer) => layer.name === "collidingBlocks"
     );
+    const itemsLayer = mapData.layers.find((layer) => layer.name === "items");
     this.collisionData = collisionLayer.data;
+    this.itemsData = itemsLayer.data;
 
     // Map dimensions
     this.mapWidth = mapData.width;
@@ -44,6 +54,28 @@ export class MapData {
           this.tileHeight
         );
       }
+    }
+  }
+
+  drawItemsLayer(jumpHeight) {
+    for (let i = 0; i < this.itemsData.length; i++) {
+      const x = (i % this.mapWidth) * this.tileWidth;
+      const y = Math.floor(i / this.mapWidth) * this.tileHeight + jumpHeight;
+      let image;
+      switch (this.itemsData[i]) {
+        case 146:
+          image = this.javascript;
+          break;
+        case 147:
+          image = this.html;
+          break;
+        case 148:
+          image = this.css;
+          break;
+        default:
+          continue;
+      }
+      ctx.drawImage(image, x, y, this.tileWidth, this.tileHeight);
     }
   }
 }

@@ -3,6 +3,7 @@ import { boy } from "../objects/sprites.js";
 import { ctx } from "../config/canvas.js";
 import { MapData } from "./MapData.js";
 import { Gravity } from "../physics/Gravity.js";
+import { CollisionDetector } from "../physics/CollisionDetector.js";
 
 export class Level {
   devMode = true;
@@ -15,7 +16,8 @@ export class Level {
     this.startPoint = levelSettings.startPoint;
     this.player.position = this.startPoint;
     this.mapJson = levelSettings.mapJson;
-    this.mapData = new MapData(levelSettings);
+    this.collisionDetector = new CollisionDetector(this.mapData, this.player);
+    this.mapData = new MapData(levelSettings, this.collisionDetector);
     this.gravity = new Gravity(this.player, this.mapData);
   }
 
@@ -53,6 +55,8 @@ export class Level {
     );
 
     ctx.drawImage(this.map, 0, this.player.jumpHeight);
+
+    this.mapData.drawItemsLayer(this.player.jumpHeight);
 
     if (this.devMode) {
       this.mapData.drawCollisionLayer(this.player.jumpHeight);
