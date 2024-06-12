@@ -1,12 +1,21 @@
 export class CollisionDetector {
-  detection = false;
   constructor(mapData, player) {
     this.mapData = mapData;
     this.player = player;
+    this.htmlCollected = false;
+    this.cssCollected = false;
   }
 
   detectCollision() {
     this.player.isOnGround = false;
+    const playerBounds = this.getPlayerBounds();
+    const { collisionData, itemsData } = this.mapData;
+
+    this.detectTileCollisions(playerBounds, collisionData);
+    this.detectItemCollisions(playerBounds, itemsData);
+  }
+
+  getPlayerBounds() {
     const {
       position,
       frameWidth,
@@ -16,56 +25,81 @@ export class CollisionDetector {
       offsetWidth,
       offsetHeight,
     } = this.player;
-    const playerBounds = {
+    return {
       top: position.y + offsetY,
       bottom: position.y + frameHeight - offsetHeight,
       left: position.x + offsetX,
       right: position.x + frameWidth - offsetWidth,
     };
+  }
 
-    const { collisionData, itemsData, mapWidth, tileWidth, tileHeight } =
-      this.mapData;
+  getTileBounds(
+    index,
+    mapWidth,
+    tileWidth,
+    tileHeight,
+    jumpHeight,
+    collisionOffset = 0
+  ) {
+    const tileX = (index % mapWidth) * tileWidth;
+    const tileY =
+      Math.floor(index / mapWidth) * tileHeight + jumpHeight - collisionOffset;
+    return {
+      top: tileY,
+      bottom: tileY + tileHeight,
+      left: tileX,
+      right: tileX + tileWidth,
+    };
+  }
+
+  detectTileCollisions(playerBounds, collisionData) {
+    const { mapWidth, tileWidth, tileHeight } = this.mapData;
     const jumpHeight = this.player.jumpHeight;
+    const collisionOffset = 30;
 
-    for (let i = 0; i < collisionData.length; i++) {
-      if (collisionData[i] !== 0) {
-        const collisionOffset = 30;
-        const tileX = (i % mapWidth) * tileWidth;
-        const tileY =
-          Math.floor(i / mapWidth) * tileHeight + jumpHeight - collisionOffset;
-
-        const tileBounds = {
-          top: tileY,
-          bottom: tileY + tileHeight,
-          left: tileX,
-          right: tileX + tileWidth,
-        };
-
+    collisionData.forEach((tile, i) => {
+      if (tile !== 0) {
+        const tileBounds = this.getTileBounds(
+          i,
+          mapWidth,
+          tileWidth,
+          tileHeight,
+          jumpHeight,
+          collisionOffset
+        );
         if (this.isCollisionFromAbove(playerBounds, tileBounds)) {
-          console.log("Collision detected from above");
           this.player.isOnGround = true;
         }
       }
-    }
+    });
+  }
 
-    for (let i = 0; i < itemsData.length; i++) {
-      if (itemsData[i] !== 0) {
-        const tileX = (i % mapWidth) * tileWidth;
-        const tileY = Math.floor(i / mapWidth) * tileHeight + jumpHeight;
+  detectItemCollisions(playerBounds, itemsData) {
+    const { mapWidth, tileWidth, tileHeight } = this.mapData;
+    const jumpHeight = this.player.jumpHeight;
 
-        const tileBounds = {
-          top: tileY,
-          bottom: tileY + tileHeight,
-          left: tileX,
-          right: tileX + tileWidth,
-        };
-
+    itemsData.forEach((item, i) => {
+      if (item !== 0) {
+        const tileBounds = this.getTileBounds(
+          i,
+          mapWidth,
+          tileWidth,
+          tileHeight,
+          jumpHeight
+        );
         if (this.isCollisionFromAbove(playerBounds, tileBounds)) {
-          this.mapData.itemsData.splice(i, 1);
-          break;
+          console.log(i);
+          if (i === 246) {
+            this.htmlCollected = true;
+          }
+          if (i === 164) {
+            this.cssCollected = true;
+          }
+
+          this.mapData.itemsData[i] = 0; // Setze den Item-Wert auf 0, um das Einsammeln zu simulieren
         }
       }
-    }
+    });
   }
 
   isCollisionFromAbove(playerBounds, tileBounds) {
