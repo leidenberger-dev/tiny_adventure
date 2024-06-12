@@ -23,6 +23,7 @@ export class Player extends MoveableObject {
       this.totalJump = 0;
       this.jumpSpeed = 20;
       this.fallSpeed = 0.4;
+      this.animation(this.sprite.jumping);
     }
   }
 
@@ -30,6 +31,7 @@ export class Player extends MoveableObject {
     if (pressedKeys.up && this.canJump) {
       this.jump();
       this.canJump = false;
+      this.isJumping = true;
     }
     if (!pressedKeys.up) {
       this.canJump = true;
@@ -38,10 +40,10 @@ export class Player extends MoveableObject {
       this.position.y += this.speed;
     }
     if (pressedKeys.left) {
-      this.position.x -= this.speed;
+      this.moveLeft();
     }
     if (pressedKeys.right) {
-      this.position.x += this.speed;
+      this.moveRight();
     }
 
     if (this.totalJump < this.jumpHeight) {
@@ -50,9 +52,19 @@ export class Player extends MoveableObject {
       this.totalJump += this.jumpSpeed;
     } else {
       if (!this.isOnGround) {
+        this.isJumping = false;
         this.isFalling = true;
+        this.animation(this.sprite.falling);
         this.position.y += this.fallSpeed;
         this.fallSpeed += this.fallAcceleration;
+      } else {
+        this.isFalling = false;
+        this.isJumping = false;
+        if (pressedKeys.right || pressedKeys.left) {
+          this.animation(this.sprite.walking);
+        } else {
+          this.animation(this.sprite.idle); // Setzen Sie das Sprite auf 'idle', wenn der Spieler auf dem Boden ist und sich nicht bewegt
+        }
       }
     }
   }

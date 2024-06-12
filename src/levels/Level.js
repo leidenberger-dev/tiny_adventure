@@ -23,15 +23,35 @@ export class Level {
 
   update() {
     this.gravity.applyGravity();
-    this.player.update();
   }
 
   draw() {
-    const parallax = 0.15;
-    const bgX = this.player.position.x * parallax;
-
     this.update();
 
+    this.drawBackground();
+
+    ctx.drawImage(this.map, 0, this.player.jumpHeight);
+
+    this.mapData.drawItemsLayer(this.player.jumpHeight);
+
+    if (this.devMode) {
+      this.mapData.drawCollisionLayer(this.player.jumpHeight);
+      this.player.imageRectangle();
+      this.player.imageCollisionRectangle();
+    }
+  }
+
+  setDevModeTrue() {
+    if (!this.devMode) {
+      this.devMode = true;
+    } else {
+      this.devMode = false;
+    }
+  }
+
+  drawBackground() {
+    const parallax = 0.15;
+    const bgX = this.player.position.x * parallax;
     ctx.drawImage(
       this.background,
       -bgX - this.map.width,
@@ -53,23 +73,5 @@ export class Level {
       this.map.width,
       this.map.height + this.player.jumpHeight
     );
-
-    ctx.drawImage(this.map, 0, this.player.jumpHeight);
-
-    this.mapData.drawItemsLayer(this.player.jumpHeight);
-
-    if (this.devMode) {
-      this.mapData.drawCollisionLayer(this.player.jumpHeight);
-      this.player.imageRectangle();
-      this.player.imageCollisionRectangle();
-    }
-  }
-
-  setDevModeTrue() {
-    if (!this.devMode) {
-      this.devMode = true;
-    } else {
-      this.devMode = false;
-    }
   }
 }

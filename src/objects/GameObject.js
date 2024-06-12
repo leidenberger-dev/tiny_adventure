@@ -11,6 +11,7 @@ export class GameObject {
     this.offsetY = sprite.offsetY;
     this.offsetWidth = sprite.offsetWidth;
     this.offsetHeight = sprite.offsetHeight;
+    this.maxColumns = sprite.maxColumns;
     this.row = 0;
     this.column = 0;
   }
@@ -27,6 +28,24 @@ export class GameObject {
       this.frameWidth,
       this.frameHeight
     );
+  }
+
+  drawMirrored() {
+    ctx.save(); // Speichern Sie den aktuellen Zustand des Kontexts
+    ctx.scale(-1, 1); // Skalieren Sie den Kontext horizontal um -1
+    ctx.drawImage(
+      this.img,
+      this.column * this.frameWidth,
+      this.row * this.frameHeight,
+      this.frameWidth,
+      this.frameHeight,
+      -(this.position.x + this.frameWidth / 1.4), // Addieren Sie frameWidth zur x-Position vor dem Negieren
+      this.position.y,
+      this.frameWidth,
+      this.frameHeight
+    );
+    ctx.restore();
+    ctx.restore(); // Stellen Sie den ursprünglichen Zustand des Kontexts wieder her
   }
 
   imageRectangle() {
