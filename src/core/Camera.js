@@ -4,6 +4,7 @@ export class Camera {
   x = 1;
   y = 0;
   tileHeight = 128;
+  lowestPlayerPositionY = 1350;
 
   constructor(player, level) {
     this.level = level;
@@ -13,7 +14,9 @@ export class Camera {
   }
 
   update() {
-    this.camera();
+    if (this.player.position.y < this.lowestPlayerPositionY) {
+      this.camera();
+    }
   }
 
   camera() {
