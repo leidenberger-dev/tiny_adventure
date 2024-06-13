@@ -4,6 +4,7 @@ export class CollisionDetector {
     this.player = player;
     this.htmlCollected = false;
     this.cssCollected = false;
+    this.javascriptCollected = false;
   }
 
   detectCollision() {
@@ -88,7 +89,9 @@ export class CollisionDetector {
           jumpHeight
         );
         if (this.isCollisionFromAbove(playerBounds, tileBounds)) {
-          console.log(i);
+          if (i === 94) {
+            this.javascriptCollected = true;
+          }
           if (i === 246) {
             this.htmlCollected = true;
           }

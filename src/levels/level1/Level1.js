@@ -4,6 +4,7 @@ const levelSettings = {
   mapJson: "./src/levels/level1/level1.json",
   map: "./assets/img/map.png",
   background: "./assets/img/bg.png",
+  clouds: "./assets/img/clouds.png",
   startPoint: {
     x: 2500,
     y: 1220,

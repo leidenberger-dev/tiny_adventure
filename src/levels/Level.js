@@ -11,6 +11,8 @@ export class Level {
   devMode = false;
   isHtmlCollected = false;
   isCssCollected = false;
+  isJavascriptCollected = false;
+  cloudX = 2650;
   constructor(levelSettings) {
     this.player = new Player(boy);
     this.map = new Image();
@@ -18,8 +20,9 @@ export class Level {
     mapWidth = this.map.width;
     this.background = new Image();
     this.background.src = levelSettings.background;
-    this.startPoint = levelSettings.startPoint;
-    this.player.position = this.startPoint;
+    this.clouds = new Image();
+    this.clouds.src = levelSettings.clouds;
+    this.player.position = levelSettings.startPoint;
     this.mapJson = levelSettings.mapJson;
     this.mapData = new MapData(levelSettings);
     this.collisionDetector = new CollisionDetector(this.mapData, this.player);
@@ -40,6 +43,9 @@ export class Level {
     if (this.collisionDetector.cssCollected) {
       this.isCssCollected = true;
     }
+    if (this.collisionDetector.javascriptCollected) {
+      this.isJavascriptCollected = true;
+    }
   }
 
   draw() {
@@ -48,6 +54,8 @@ export class Level {
     if (this.isCssCollected) {
       this.drawBackground();
     }
+
+    this.drawClouds();
 
     if (this.isHtmlCollected) {
       ctx.drawImage(this.map, 0, this.player.jumpHeight);
@@ -102,6 +110,17 @@ export class Level {
       this.map.height + this.player.jumpHeight
     );
   }
+
+  drawClouds() {
+    if (this.isJavascriptCollected) {
+      this.cloudX -= 0.8;
+    }
+    ctx.drawImage(this.clouds, this.cloudX, 110);
+    if (this.cloudX + this.clouds.width < 0) {
+      this.cloudX = this.map.width;
+    }
+  }
+
   convertToBlackAndWhite = () => {
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
