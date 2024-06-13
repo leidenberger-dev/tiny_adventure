@@ -5,6 +5,8 @@ import { MapData } from "./MapData.js";
 import { Gravity } from "../physics/Gravity.js";
 import { CollisionDetector } from "../physics/CollisionDetector.js";
 
+export let mapWidth = 0;
+
 export class Level {
   devMode = false;
   isHtmlCollected = false;
@@ -13,6 +15,7 @@ export class Level {
     this.player = new Player(boy);
     this.map = new Image();
     this.map.src = levelSettings.map;
+    mapWidth = this.map.width;
     this.background = new Image();
     this.background.src = levelSettings.background;
     this.startPoint = levelSettings.startPoint;

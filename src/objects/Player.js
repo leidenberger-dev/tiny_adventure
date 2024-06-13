@@ -1,6 +1,7 @@
 import { MoveableObject } from "./MoveableObject.js";
 import { handleInput } from "../core/inputHandler.js";
 import { pressedKeys } from "../config/keys.js";
+import { mapWidth } from "../levels/Level.js";
 
 export class Player extends MoveableObject {
   constructor(sprite) {
@@ -42,10 +43,14 @@ export class Player extends MoveableObject {
       this.position.y += this.speed;
     }
     if (pressedKeys.left) {
-      this.moveLeft();
+      if (this.position.x > 0) {
+        this.moveLeft();
+      }
     }
     if (pressedKeys.right) {
-      this.moveRight();
+      if (this.position.x < mapWidth - this.frameWidth / 2) {
+        this.moveRight();
+      }
     }
   }
 
