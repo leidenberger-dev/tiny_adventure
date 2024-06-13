@@ -4,7 +4,7 @@ import { Camera } from "./Camera.js";
 export class Renderer {
   constructor(level) {
     this.level = level;
-    this.camera = new Camera(this.level.player);
+    this.camera = new Camera(this.level.player, this.level);
   }
 
   update() {
