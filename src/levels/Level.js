@@ -73,6 +73,10 @@ export class Level {
   drawBackground() {
     const parallax = 0.15;
     const bgX = this.player.position.x * parallax;
+
+    ctx.fillStyle = "#6ED0CF";
+    ctx.fillRect(0, -500, this.map.width, this.map.height);
+
     ctx.drawImage(
       this.background,
       -bgX - this.map.width,
