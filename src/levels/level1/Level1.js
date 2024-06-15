@@ -2,7 +2,7 @@ import { Level } from "../Level.js";
 
 const levelSettings = {
   mapJson: "./src/levels/level1/level1.json",
-  map: "./assets/img/map.png",
+  map: "./assets/img/mapLevel1.png",
   background: "./assets/img/bg.png",
   clouds: "./assets/img/clouds.png",
   startPoint: {

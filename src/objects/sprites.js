@@ -1,4 +1,4 @@
-export const boy = {
+export const boySprite = {
   img: "../assets/img/boy.png",
   frameWidth: 200,
   frameHeight: 250,
@@ -32,7 +32,7 @@ export const boy = {
   },
 };
 
-export const pepe = {
+export const pepeSprite = {
   img: "../assets/img/pepe.png",
   position: {
     x: 3350,
@@ -59,5 +59,31 @@ export const pepe = {
   walking: {
     row: 0,
     maxColumns: 6,
+  },
+};
+
+export const doorSprite = {
+  img: "../assets/img/door.png",
+  position: {
+    x: 3310,
+    y: 1200,
+  },
+  frameWidth: 159,
+  frameHeight: 252,
+  maxColumns: 5,
+  offsetX: -60,
+  offsetY: 125,
+  offsetWidth: 20,
+  offsetHeight: 58,
+  animationSpeed: 10,
+
+  close: {
+    row: 0,
+    maxColumns: 0,
+  },
+
+  animate: {
+    row: 0,
+    maxColumns: 5,
   },
 };

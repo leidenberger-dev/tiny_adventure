@@ -1,10 +1,11 @@
 import { Player } from "../objects/Player.js";
-import { boy, pepe } from "../objects/sprites.js";
+import { boySprite, pepeSprite, doorSprite } from "../objects/sprites.js";
 import { canvas, ctx } from "../config/canvas.js";
 import { MapData } from "./MapData.js";
 import { Gravity } from "../physics/Gravity.js";
 import { CollisionDetector } from "../physics/CollisionDetector.js";
 import { Pepe } from "../objects/Pepe.js";
+import { Door } from "../objects/Door.js";
 
 export let mapWidth = 0;
 
@@ -15,8 +16,9 @@ export class Level {
   isJavascriptCollected = false;
   cloudX = 2650;
   constructor(levelSettings) {
-    this.player = new Player(boy);
-    this.pepe = new Pepe(pepe, this);
+    this.player = new Player(boySprite);
+    this.pepe = new Pepe(pepeSprite, this);
+    this.door = new Door(doorSprite);
     this.map = new Image();
     this.map.src = levelSettings.map;
     mapWidth = this.map.width;
@@ -69,6 +71,7 @@ export class Level {
 
     if (this.isHtmlCollected) {
       ctx.drawImage(this.map, 0, this.player.jumpHeight);
+      this.door.draw();
       this.pepe.drawMirrored();
     }
 
