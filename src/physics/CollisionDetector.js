@@ -135,9 +135,10 @@ export class CollisionDetector {
   }
 
   isCollisionFromAbove(playerBounds, tileBounds) {
+    const playerHeight = this.player.frameHeight;
     return (
       playerBounds.bottom > tileBounds.top &&
-      playerBounds.top < tileBounds.bottom &&
+      playerBounds.top < tileBounds.bottom - playerHeight &&
       playerBounds.right > tileBounds.left &&
       playerBounds.left < tileBounds.right
     );
