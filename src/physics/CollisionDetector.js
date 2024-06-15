@@ -144,7 +144,10 @@ export class CollisionDetector {
   }
 
   detectPepeCollision(playerBounds, PepeBounds) {
-    if (this.isCollision(playerBounds, PepeBounds)) {
+    if (
+      this.isCollision(playerBounds, PepeBounds) &&
+      this.pepe.row === this.pepe.sprite.idle.row
+    ) {
       this.pepe.collision = true;
     }
   }
