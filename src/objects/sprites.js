@@ -71,10 +71,10 @@ export const doorSprite = {
   frameWidth: 159,
   frameHeight: 252,
   maxColumns: 5,
-  offsetX: -60,
-  offsetY: 125,
-  offsetWidth: 20,
-  offsetHeight: 58,
+  offsetX: 0,
+  offsetY: 0,
+  offsetWidth: 0,
+  offsetHeight: 0,
   animationSpeed: 10,
 
   close: {
@@ -82,7 +82,7 @@ export const doorSprite = {
     maxColumns: 0,
   },
 
-  animate: {
+  open: {
     row: 0,
     maxColumns: 5,
   },

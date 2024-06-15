@@ -1,8 +1,9 @@
 export class CollisionDetector {
-  constructor(mapData, player, pepe) {
+  constructor(mapData, player, pepe, door) {
     this.mapData = mapData;
     this.player = player;
     this.pepe = pepe;
+    this.door = door;
     this.htmlCollected = false;
     this.cssCollected = false;
     this.javascriptCollected = false;
@@ -16,6 +17,7 @@ export class CollisionDetector {
     this.detectGroundCollisions(playerBounds, collisionData);
     this.detectItemCollisions(playerBounds, itemsData);
     this.detectPepeCollision(playerBounds, this.getPepeBounds());
+    this.detectDoorCollision(playerBounds, this.getDoorBounds());
   }
 
   getPlayerBounds() {
@@ -46,6 +48,24 @@ export class CollisionDetector {
       offsetWidth,
       offsetHeight,
     } = this.pepe;
+    return {
+      top: position.y + offsetY,
+      bottom: position.y + frameHeight - offsetHeight,
+      left: position.x + offsetX,
+      right: position.x + frameWidth - offsetWidth,
+    };
+  }
+
+  getDoorBounds() {
+    const {
+      position,
+      frameWidth,
+      frameHeight,
+      offsetX,
+      offsetY,
+      offsetWidth,
+      offsetHeight,
+    } = this.door;
     return {
       top: position.y + offsetY,
       bottom: position.y + frameHeight - offsetHeight,
@@ -134,6 +154,15 @@ export class CollisionDetector {
     );
   }
 
+  isCollisionInside(playerBounds, tileBounds) {
+    return (
+      playerBounds.bottom > tileBounds.top &&
+      playerBounds.top < tileBounds.bottom &&
+      playerBounds.right < tileBounds.right &&
+      playerBounds.left > tileBounds.left
+    );
+  }
+
   isCollisionFromAbove(playerBounds, tileBounds) {
     const playerHeight = this.player.frameHeight;
     return (
@@ -144,12 +173,21 @@ export class CollisionDetector {
     );
   }
 
-  detectPepeCollision(playerBounds, PepeBounds) {
+  detectPepeCollision(playerBounds, pepeBounds) {
     if (
-      this.isCollision(playerBounds, PepeBounds) &&
+      this.isCollision(playerBounds, pepeBounds) &&
       this.pepe.row === this.pepe.sprite.idle.row
     ) {
       this.pepe.collision = true;
+    }
+  }
+
+  detectDoorCollision(playerBounds, doorBounds) {
+    if (
+      this.isCollisionInside(playerBounds, doorBounds) &&
+      this.pepe.openDoor
+    ) {
+      this.door.collision = true;
     }
   }
 }

@@ -1,5 +1,7 @@
 import { MoveableObject } from "./MoveableObject.js";
 
+export let pepeOpenDoor = false;
+
 export class Pepe extends MoveableObject {
   doorUnlocked = false;
   targetX = this.position.x + 128;
@@ -25,8 +27,8 @@ export class Pepe extends MoveableObject {
     } else if (this.position.x >= this.targetX) {
       this.activeAnimation = () => {
         this.animation(this.sprite.idle);
+        pepeOpenDoor = true;
       };
-      this.doorUnlocked = false;
     }
   }
 

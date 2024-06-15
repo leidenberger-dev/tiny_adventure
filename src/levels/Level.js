@@ -32,7 +32,8 @@ export class Level {
     this.collisionDetector = new CollisionDetector(
       this.mapData,
       this.player,
-      this.pepe
+      this.pepe,
+      this.door
     );
     this.mapData.collisionDetector = this.collisionDetector;
     this.gravity = new Gravity(
@@ -56,6 +57,7 @@ export class Level {
     }
 
     this.pepe.update();
+    this.door.update();
   }
 
   draw() {
@@ -86,6 +88,8 @@ export class Level {
       this.player.imageCollisionRectangle();
       this.pepe.imageRectangle();
       this.pepe.imageCollisionRectangle();
+      this.door.imageRectangle();
+      this.door.imageCollisionRectangle();
     }
   }
 
