@@ -21,17 +21,11 @@ export class MoveableObject extends GameObject {
   moveLeft() {
     this.position.x -= this.speed;
     this.isLookingRight = false;
-    if (!this.isJumping) {
-      this.animation(this.sprite.walking);
-    }
   }
 
   moveRight() {
     this.position.x += this.speed;
     this.isLookingRight = true;
-    if (!this.isJumping) {
-      this.animation(this.sprite.walking);
-    }
   }
 
   animation(spriteState) {

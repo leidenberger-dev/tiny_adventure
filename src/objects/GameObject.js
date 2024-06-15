@@ -44,11 +44,11 @@ export class GameObject {
       this.frameWidth,
       this.frameHeight
     );
-    ctx.restore();
     ctx.restore(); // Stellen Sie den ursprünglichen Zustand des Kontexts wieder her
   }
 
   imageRectangle() {
+    ctx.strokeStyle = "black";
     ctx.strokeRect(
       this.position.x,
       this.position.y,

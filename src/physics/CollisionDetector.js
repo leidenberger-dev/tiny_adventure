@@ -1,7 +1,8 @@
 export class CollisionDetector {
-  constructor(mapData, player) {
+  constructor(mapData, player, pepe) {
     this.mapData = mapData;
     this.player = player;
+    this.pepe = pepe;
     this.htmlCollected = false;
     this.cssCollected = false;
     this.javascriptCollected = false;
@@ -12,8 +13,9 @@ export class CollisionDetector {
     const playerBounds = this.getPlayerBounds();
     const { collisionData, itemsData } = this.mapData;
 
-    this.detectTileCollisions(playerBounds, collisionData);
+    this.detectGroundCollisions(playerBounds, collisionData);
     this.detectItemCollisions(playerBounds, itemsData);
+    this.detectPepeCollision(playerBounds, this.getPepeBounds());
   }
 
   getPlayerBounds() {
@@ -26,6 +28,24 @@ export class CollisionDetector {
       offsetWidth,
       offsetHeight,
     } = this.player;
+    return {
+      top: position.y + offsetY,
+      bottom: position.y + frameHeight - offsetHeight,
+      left: position.x + offsetX,
+      right: position.x + frameWidth - offsetWidth,
+    };
+  }
+
+  getPepeBounds() {
+    const {
+      position,
+      frameWidth,
+      frameHeight,
+      offsetX,
+      offsetY,
+      offsetWidth,
+      offsetHeight,
+    } = this.pepe;
     return {
       top: position.y + offsetY,
       bottom: position.y + frameHeight - offsetHeight,
@@ -53,7 +73,7 @@ export class CollisionDetector {
     };
   }
 
-  detectTileCollisions(playerBounds, collisionData) {
+  detectGroundCollisions(playerBounds, collisionData) {
     const { mapWidth, tileWidth, tileHeight } = this.mapData;
     const jumpHeight = this.player.jumpHeight;
     const collisionOffset = 30;
@@ -88,7 +108,7 @@ export class CollisionDetector {
           tileHeight,
           jumpHeight
         );
-        if (this.isCollisionFromAbove(playerBounds, tileBounds)) {
+        if (this.isCollision(playerBounds, tileBounds)) {
           if (i === 94) {
             this.javascriptCollected = true;
           }
@@ -99,18 +119,33 @@ export class CollisionDetector {
             this.cssCollected = true;
           }
 
-          this.mapData.itemsData[i] = 0; // Setze den Item-Wert auf 0, um das Einsammeln zu simulieren
+          this.mapData.itemsData[i] = 0;
         }
       }
     });
   }
 
-  isCollisionFromAbove(playerBounds, tileBounds) {
+  isCollision(playerBounds, tileBounds) {
     return (
       playerBounds.bottom > tileBounds.top &&
-      playerBounds.top < tileBounds.top &&
+      playerBounds.top < tileBounds.bottom &&
       playerBounds.right > tileBounds.left &&
       playerBounds.left < tileBounds.right
     );
+  }
+
+  isCollisionFromAbove(playerBounds, tileBounds) {
+    return (
+      playerBounds.bottom > tileBounds.top &&
+      playerBounds.top < tileBounds.bottom &&
+      playerBounds.right > tileBounds.left &&
+      playerBounds.left < tileBounds.right
+    );
+  }
+
+  detectPepeCollision(playerBounds, PepeBounds) {
+    if (this.isCollision(playerBounds, PepeBounds)) {
+      this.pepe.collision = true;
+    }
   }
 }

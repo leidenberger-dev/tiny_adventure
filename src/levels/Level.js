@@ -1,9 +1,10 @@
 import { Player } from "../objects/Player.js";
-import { boy } from "../objects/sprites.js";
+import { boy, pepe } from "../objects/sprites.js";
 import { canvas, ctx } from "../config/canvas.js";
 import { MapData } from "./MapData.js";
 import { Gravity } from "../physics/Gravity.js";
 import { CollisionDetector } from "../physics/CollisionDetector.js";
+import { Pepe } from "../objects/Pepe.js";
 
 export let mapWidth = 0;
 
@@ -15,6 +16,7 @@ export class Level {
   cloudX = 2650;
   constructor(levelSettings) {
     this.player = new Player(boy);
+    this.pepe = new Pepe(pepe, this);
     this.map = new Image();
     this.map.src = levelSettings.map;
     mapWidth = this.map.width;
@@ -25,7 +27,11 @@ export class Level {
     this.player.position = levelSettings.startPoint;
     this.mapJson = levelSettings.mapJson;
     this.mapData = new MapData(levelSettings);
-    this.collisionDetector = new CollisionDetector(this.mapData, this.player);
+    this.collisionDetector = new CollisionDetector(
+      this.mapData,
+      this.player,
+      this.pepe
+    );
     this.mapData.collisionDetector = this.collisionDetector;
     this.gravity = new Gravity(
       this.player,
@@ -46,6 +52,8 @@ export class Level {
     if (this.collisionDetector.javascriptCollected) {
       this.isJavascriptCollected = true;
     }
+
+    this.pepe.update();
   }
 
   draw() {
@@ -55,10 +63,13 @@ export class Level {
       this.drawBackground();
     }
 
-    this.drawClouds();
+    if (this.isJavascriptCollected) {
+      this.drawClouds();
+    }
 
     if (this.isHtmlCollected) {
       ctx.drawImage(this.map, 0, this.player.jumpHeight);
+      this.pepe.drawMirrored();
     }
 
     if (!this.isCssCollected) {
@@ -70,6 +81,8 @@ export class Level {
       this.mapData.drawCollisionLayer(this.player.jumpHeight);
       this.player.imageRectangle();
       this.player.imageCollisionRectangle();
+      this.pepe.imageRectangle();
+      this.pepe.imageCollisionRectangle();
     }
   }
 
@@ -112,9 +125,7 @@ export class Level {
   }
 
   drawClouds() {
-    if (this.isJavascriptCollected) {
-      this.cloudX -= 0.8;
-    }
+    this.cloudX -= 0.8;
     ctx.drawImage(this.clouds, this.cloudX, 110);
     if (this.cloudX + this.clouds.width < 0) {
       this.cloudX = this.map.width;
