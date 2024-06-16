@@ -10,11 +10,19 @@ import { Door } from "../objects/Door.js";
 export let mapWidth = 0;
 
 export class Level {
+  pause = false;
   devMode = false;
   isHtmlCollected = false;
   isCssCollected = false;
   isJavascriptCollected = false;
-  cloudX = 2650;
+  cloudX = 1500;
+  showStep1 = true;
+  showStep2 = false;
+  showStep3 = false;
+  showStep4 = false;
+  showStep2Counter = 0;
+  showStep3Counter = 0;
+  showStep4Counter = 0;
   constructor(levelSettings) {
     this.player = new Player(boySprite);
     this.pepe = new Pepe(pepeSprite, this);
@@ -26,6 +34,14 @@ export class Level {
     this.background.src = levelSettings.background;
     this.clouds = new Image();
     this.clouds.src = levelSettings.clouds;
+    this.signStep1 = new Image();
+    this.signStep1.src = "./assets/img/step1.png";
+    this.signStep2 = new Image();
+    this.signStep2.src = "./assets/img/step2.png";
+    this.signStep3 = new Image();
+    this.signStep3.src = "./assets/img/step3.png";
+    this.signStep4 = new Image();
+    this.signStep4.src = "./assets/img/step4.png";
     this.player.position = levelSettings.startPoint;
     this.mapJson = levelSettings.mapJson;
     this.mapData = new MapData(levelSettings);
@@ -46,14 +62,23 @@ export class Level {
   update() {
     this.gravity.applyGravity();
     this.collisionDetector.detectCollision();
-    if (this.collisionDetector.htmlCollected) {
+    if (this.collisionDetector.htmlCollected && !this.showStep2Counter) {
       this.isHtmlCollected = true;
+      this.showStep2 = true;
+      this.showStep2Counter++;
+      this.pause = true;
     }
-    if (this.collisionDetector.cssCollected) {
+    if (this.collisionDetector.cssCollected && !this.showStep3Counter) {
       this.isCssCollected = true;
+      this.showStep3 = true;
+      this.showStep3Counter++;
+      this.pause = true;
     }
-    if (this.collisionDetector.javascriptCollected) {
+    if (this.collisionDetector.javascriptCollected && !this.showStep4Counter) {
       this.isJavascriptCollected = true;
+      this.showStep4 = true;
+      this.showStep4Counter++;
+      this.pause = true;
     }
 
     this.pepe.update();
@@ -67,9 +92,7 @@ export class Level {
       this.drawBackground();
     }
 
-    if (this.isJavascriptCollected) {
-      this.drawClouds();
-    }
+    this.drawClouds();
 
     if (this.isHtmlCollected) {
       ctx.drawImage(this.map, 0, this.player.jumpHeight);
@@ -81,6 +104,8 @@ export class Level {
       this.convertToBlackAndWhite();
     }
     this.mapData.drawItemsLayer(this.player.jumpHeight);
+
+    this.signSteps();
 
     if (this.devMode) {
       this.mapData.drawCollisionLayer(this.player.jumpHeight);
@@ -132,7 +157,9 @@ export class Level {
   }
 
   drawClouds() {
-    this.cloudX -= 0.8;
+    if (this.isJavascriptCollected) {
+      this.cloudX -= 0.8;
+    }
     ctx.drawImage(this.clouds, this.cloudX, 110);
     if (this.cloudX + this.clouds.width < 0) {
       this.cloudX = this.map.width;
@@ -156,4 +183,35 @@ export class Level {
 
     ctx.putImageData(imageData, 0, 0);
   };
+
+  signSteps() {
+    if (this.showStep1) {
+      ctx.drawImage(
+        this.signStep1,
+        this.player.position.x - this.player.frameWidth / 2,
+        this.player.position.y - this.player.frameHeight
+      );
+    }
+    if (this.showStep2) {
+      ctx.drawImage(
+        this.signStep2,
+        this.player.position.x - this.player.frameWidth / 2,
+        this.player.position.y - this.player.frameHeight
+      );
+    }
+    if (this.showStep3) {
+      ctx.drawImage(
+        this.signStep3,
+        this.player.position.x - this.player.frameWidth / 2,
+        this.player.position.y - this.player.frameHeight
+      );
+    }
+    if (this.showStep4) {
+      ctx.drawImage(
+        this.signStep4,
+        this.player.position.x - this.player.frameWidth / 2,
+        this.player.position.y - this.player.frameHeight
+      );
+    }
+  }
 }

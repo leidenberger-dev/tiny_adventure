@@ -129,13 +129,13 @@ export class CollisionDetector {
           jumpHeight
         );
         if (this.isCollision(playerBounds, tileBounds)) {
-          if (i === 94) {
+          if (item === 147) {
             this.javascriptCollected = true;
           }
-          if (i === 246) {
+          if (item === 148) {
             this.htmlCollected = true;
           }
-          if (i === 164) {
+          if (item === 149) {
             this.cssCollected = true;
           }
 

@@ -7,7 +7,7 @@ const levelSettings = {
   clouds: "./assets/img/clouds.png",
   startPoint: {
     x: 2500,
-    y: 1220,
+    y: 1231,
   },
 };
 

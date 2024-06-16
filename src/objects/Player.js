@@ -1,12 +1,10 @@
 import { MoveableObject } from "./MoveableObject.js";
-import { handleInput } from "../core/inputHandler.js";
 import { pressedKeys } from "../config/keys.js";
 import { mapWidth } from "../levels/Level.js";
 
 export class Player extends MoveableObject {
   constructor(sprite) {
     super(sprite);
-    this.input = handleInput;
     this.jumpHeight = 300;
     this.speed = 8;
     this.jumpSpeed = null;
@@ -18,7 +16,6 @@ export class Player extends MoveableObject {
     this.isOnGround = true;
     this.isFalling = false;
     this.isAttacking = false;
-    this.input();
   }
 
   jump() {
