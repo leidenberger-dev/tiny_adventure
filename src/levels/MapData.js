@@ -63,13 +63,13 @@ export class MapData {
       const y = Math.floor(i / this.mapWidth) * this.tileHeight + jumpHeight;
       let image;
       switch (this.itemsData[i]) {
-        case 146:
+        case 147:
           image = this.javascript;
           break;
-        case 147:
+        case 148:
           image = this.html;
           break;
-        case 148:
+        case 149:
           image = this.css;
           break;
         default:
