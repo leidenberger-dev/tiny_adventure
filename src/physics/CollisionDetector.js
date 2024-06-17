@@ -1,12 +1,12 @@
 export class CollisionDetector {
+  htmlCollected = false;
+  cssCollected = false;
+  javascriptCollected = false;
   constructor(mapData, player, pepe, door) {
     this.mapData = mapData;
     this.player = player;
     this.pepe = pepe;
     this.door = door;
-    this.htmlCollected = false;
-    this.cssCollected = false;
-    this.javascriptCollected = false;
   }
 
   detectCollision() {
