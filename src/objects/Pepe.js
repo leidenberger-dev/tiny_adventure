@@ -13,23 +13,16 @@ export class Pepe extends MoveableObject {
     };
   }
   update() {
+    this.checkJavascriptCollection();
+    this.movementOpenDoor();
+  }
+
+  checkJavascriptCollection() {
     if (this.level.isJavascriptCollected) {
       this.awake();
       this.unlockDoor();
     }
     this.activeAnimation();
-
-    if (this.doorUnlocked && this.position.x < this.targetX) {
-      this.activeAnimation = () => {
-        this.animation(this.sprite.walking);
-      };
-      this.moveRight();
-    } else if (this.position.x >= this.targetX) {
-      this.activeAnimation = () => {
-        this.animation(this.sprite.idle);
-        pepeOpenDoor = true;
-      };
-    }
   }
 
   awake() {
@@ -47,6 +40,20 @@ export class Pepe extends MoveableObject {
       this.collision
     ) {
       this.doorUnlocked = true;
+    }
+  }
+
+  movementOpenDoor() {
+    if (this.doorUnlocked && this.position.x < this.targetX) {
+      this.activeAnimation = () => {
+        this.animation(this.sprite.walking);
+      };
+      this.moveRight();
+    } else if (this.position.x >= this.targetX) {
+      this.activeAnimation = () => {
+        this.animation(this.sprite.idle);
+        pepeOpenDoor = true;
+      };
     }
   }
 }

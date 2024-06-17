@@ -62,24 +62,10 @@ export class Level {
   update() {
     this.gravity.applyGravity();
     this.collisionDetector.detectCollision();
-    if (this.collisionDetector.htmlCollected && !this.showStep2Counter) {
-      this.isHtmlCollected = true;
-      this.showStep2 = true;
-      this.showStep2Counter++;
-      this.pause = true;
-    }
-    if (this.collisionDetector.cssCollected && !this.showStep3Counter) {
-      this.isCssCollected = true;
-      this.showStep3 = true;
-      this.showStep3Counter++;
-      this.pause = true;
-    }
-    if (this.collisionDetector.javascriptCollected && !this.showStep4Counter) {
-      this.isJavascriptCollected = true;
-      this.showStep4 = true;
-      this.showStep4Counter++;
-      this.pause = true;
-    }
+
+    this.collectItem("html");
+    this.collectItem("css");
+    this.collectItem("javascript");
 
     this.pepe.update();
     this.door.update();
@@ -103,67 +89,54 @@ export class Level {
     if (!this.isCssCollected) {
       this.convertToBlackAndWhite();
     }
+
     this.mapData.drawItemsLayer(this.player.jumpHeight);
 
     this.signSteps();
 
-    if (this.devMode) {
-      this.mapData.drawCollisionLayer(this.player.jumpHeight);
-      this.player.imageRectangle();
-      this.player.imageCollisionRectangle();
-      this.pepe.imageRectangle();
-      this.pepe.imageCollisionRectangle();
-      this.door.imageRectangle();
-      this.door.imageCollisionRectangle();
-    }
+    this.switchDevMode();
   }
 
-  setDevModeTrue() {
-    if (!this.devMode) {
-      this.devMode = true;
-    } else {
-      this.devMode = false;
-    }
+  setDevMode() {
+    this.devMode = !this.devMode;
   }
 
   drawBackground() {
-    const parallax = 0.15;
-    const bgX = this.player.position.x * parallax;
+    const parallaxFactor = 0.15;
+    const backgroundColor = "#6ED0CF";
+    const backgroundYOffset = -500;
+    const backgroundX = this.player.position.x * parallaxFactor;
 
-    ctx.fillStyle = "#6ED0CF";
-    ctx.fillRect(0, -500, this.map.width, this.map.height);
+    ctx.fillStyle = backgroundColor;
+    ctx.fillRect(0, backgroundYOffset, this.map.width, this.map.height);
 
-    ctx.drawImage(
-      this.background,
-      -bgX - this.map.width,
-      0,
-      this.map.width,
-      this.map.height + this.player.jumpHeight
-    );
-    ctx.drawImage(
-      this.background,
-      -bgX,
-      0,
-      this.map.width,
-      this.map.height + this.player.jumpHeight
-    );
-    ctx.drawImage(
-      this.background,
-      -bgX + this.map.width,
-      0,
-      this.map.width,
-      this.map.height + this.player.jumpHeight
-    );
+    for (let offsetMultiplier = -1; offsetMultiplier <= 1; offsetMultiplier++) {
+      ctx.drawImage(
+        this.background,
+        -backgroundX + offsetMultiplier * this.map.width,
+        0,
+        this.map.width,
+        this.map.height + this.player.jumpHeight
+      );
+    }
+  }
+
+  updateCloudPosition() {
+    const cloudSpeed = 0.8;
+    const resetPosition = 0;
+    if (this.isJavascriptCollected) {
+      this.cloudX -= cloudSpeed;
+    }
+    if (this.cloudX + this.clouds.width < resetPosition) {
+      this.cloudX = this.map.width;
+    }
   }
 
   drawClouds() {
-    if (this.isJavascriptCollected) {
-      this.cloudX -= 0.8;
-    }
-    ctx.drawImage(this.clouds, this.cloudX, 110);
-    if (this.cloudX + this.clouds.width < 0) {
-      this.cloudX = this.map.width;
-    }
+    const cloudY = 110;
+    this.updateCloudPosition();
+    // Zeichnet die Wolkenbild an der aktuellen Position
+    ctx.drawImage(this.clouds, this.cloudX, cloudY);
   }
 
   convertToBlackAndWhite = () => {
@@ -176,7 +149,7 @@ export class Level {
       const green = data[i + 1];
       const blue = data[i + 2];
 
-      const gray = (red + green + blue) / 3;
+      const gray = 0.299 * red + 0.587 * green + 0.114 * blue;
 
       data[i] = data[i + 1] = data[i + 2] = gray;
     }
@@ -185,33 +158,54 @@ export class Level {
   };
 
   signSteps() {
-    if (this.showStep1) {
-      ctx.drawImage(
-        this.signStep1,
-        this.player.position.x - this.player.frameWidth / 2,
-        this.player.position.y - this.player.frameHeight
-      );
+    for (let step = 1; step <= 4; step++) {
+      if (this[`showStep${step}`]) {
+        ctx.drawImage(
+          this[`signStep${step}`],
+          this.player.position.x - this.player.frameWidth / 2,
+          this.player.position.y - this.player.frameHeight
+        );
+      }
     }
-    if (this.showStep2) {
-      ctx.drawImage(
-        this.signStep2,
-        this.player.position.x - this.player.frameWidth / 2,
-        this.player.position.y - this.player.frameHeight
-      );
+  }
+
+  collectItem(itemType) {
+    const collectionMap = {
+      html: {
+        collected: "isHtmlCollected",
+        showStep: "showStep2",
+        counter: "showStep2Counter",
+      },
+      css: {
+        collected: "isCssCollected",
+        showStep: "showStep3",
+        counter: "showStep3Counter",
+      },
+      javascript: {
+        collected: "isJavascriptCollected",
+        showStep: "showStep4",
+        counter: "showStep4Counter",
+      },
+    };
+
+    const item = collectionMap[itemType];
+    if (this.collisionDetector[`${itemType}Collected`] && !this[item.counter]) {
+      this[item.collected] = true;
+      this[item.showStep] = true;
+      this[item.counter]++;
+      this.pause = true;
     }
-    if (this.showStep3) {
-      ctx.drawImage(
-        this.signStep3,
-        this.player.position.x - this.player.frameWidth / 2,
-        this.player.position.y - this.player.frameHeight
-      );
-    }
-    if (this.showStep4) {
-      ctx.drawImage(
-        this.signStep4,
-        this.player.position.x - this.player.frameWidth / 2,
-        this.player.position.y - this.player.frameHeight
-      );
+  }
+
+  switchDevMode() {
+    if (this.devMode) {
+      this.mapData.drawCollisionLayer(this.player.jumpHeight);
+      this.player.imageRectangle();
+      this.player.imageCollisionRectangle();
+      this.pepe.imageRectangle();
+      this.pepe.imageCollisionRectangle();
+      this.door.imageRectangle();
+      this.door.imageCollisionRectangle();
     }
   }
 }

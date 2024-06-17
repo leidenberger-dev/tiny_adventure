@@ -9,10 +9,20 @@ export class Door extends MoveableObject {
   }
 
   update() {
-    if (pepeOpenDoor && !this.doorOpen) {
-      this.animation(this.sprite.open);
+    if (this.doorOpen) return;
+
+    if (pepeOpenDoor) {
+      this.animateDoorOpening();
     }
 
+    this.checkAnimationEnd();
+  }
+
+  animateDoorOpening() {
+    this.animation(this.sprite.open);
+  }
+
+  checkAnimationEnd() {
     if (this.column >= this.sprite.maxColumns - 1) {
       this.doorOpen = true;
     }
