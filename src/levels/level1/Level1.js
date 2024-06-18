@@ -4,11 +4,12 @@ import { Door } from "../../objects/Door.js";
 import { pepeSprite, doorSprite } from "../../objects/sprites.js";
 import { Pepe } from "../../objects/Pepe.js";
 import { Gravity } from "../../physics/Gravity.js";
-import { canvas, ctx } from "../../config/canvas.js";
+import { ctx } from "../../config/canvas.js";
+import { convertToBlackAndWhite } from "../../utils/imageUtils.js";
 
 const levelSettings = {
   mapJson: "./src/levels/level1/level1.json",
-  map: "./assets/img/mapLevel1.png",
+  map: "./assets/img/level1/mapLevel1.png",
   background: "./assets/img/bg.png",
   clouds: "./assets/img/clouds.png",
   startPoint: {
@@ -33,13 +34,13 @@ export class Level1 extends Level {
     this.pepe = new Pepe(pepeSprite, this);
     this.door = new Door(doorSprite);
     this.signStep1 = new Image();
-    this.signStep1.src = "./assets/img/step1.png";
+    this.signStep1.src = "./assets/img/level1/step1.png";
     this.signStep2 = new Image();
-    this.signStep2.src = "./assets/img/step2.png";
+    this.signStep2.src = "./assets/img/level1/step2.png";
     this.signStep3 = new Image();
-    this.signStep3.src = "./assets/img/step3.png";
+    this.signStep3.src = "./assets/img/level1/step3.png";
     this.signStep4 = new Image();
-    this.signStep4.src = "./assets/img/step4.png";
+    this.signStep4.src = "./assets/img/level1/step4.png";
 
     this.collisionDetector = new CollisionDetector(
       this.mapData,
@@ -82,7 +83,7 @@ export class Level1 extends Level {
     }
 
     if (!this.isCssCollected) {
-      this.convertToBlackAndWhite();
+      convertToBlackAndWhite();
     }
 
     this.mapData.drawItemsLayer(this.player.jumpHeight);
@@ -91,24 +92,6 @@ export class Level1 extends Level {
 
     this.switchDevMode();
   }
-
-  convertToBlackAndWhite = () => {
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imageData.data;
-    const length = data.length;
-
-    for (let i = 0; i < length; i += 4) {
-      const red = data[i];
-      const green = data[i + 1];
-      const blue = data[i + 2];
-
-      const gray = 0.299 * red + 0.587 * green + 0.114 * blue;
-
-      data[i] = data[i + 1] = data[i + 2] = gray;
-    }
-
-    ctx.putImageData(imageData, 0, 0);
-  };
 
   signSteps() {
     for (let step = 1; step <= 4; step++) {

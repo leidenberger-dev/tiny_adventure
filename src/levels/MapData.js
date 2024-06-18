@@ -6,11 +6,11 @@ export class MapData {
     this.collisionBlock = new Image();
     this.collisionBlock.src = "./assets/img/collisionblock.png";
     this.css = new Image();
-    this.css.src = "./assets/img/css.png";
+    this.css.src = "./assets/img/level1/css.png";
     this.html = new Image();
-    this.html.src = "./assets/img/html.png";
+    this.html.src = "./assets/img/level1/html.png";
     this.javascript = new Image();
-    this.javascript.src = "./assets/img/javascript.png";
+    this.javascript.src = "./assets/img/level1/javascript.png";
     this.mapJson = levelSettings.mapJson;
     this.loadJson();
   }
