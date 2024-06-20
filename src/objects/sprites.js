@@ -7,28 +7,28 @@ export const boySprite = {
   offsetY: 35,
   offsetWidth: 125,
   offsetHeight: 58,
-  animationSpeed: 8,
+  animationSpeed: 5,
 
   idle: {
     row: 1,
-    maxColumns: 9,
+    maxColumns: 10,
   },
   walking: {
     row: 0,
-    maxColumns: 9,
+    maxColumns: 10,
   },
   jumping: {
     row: 6,
-    maxColumns: 9,
+    maxColumns: 10,
   },
   falling: {
     row: 7,
-    maxColumns: 9,
+    maxColumns: 10,
   },
 
   attack: {
     row: 4,
-    maxColumns: 9,
+    maxColumns: 10,
   },
 };
 
@@ -49,11 +49,11 @@ export const pepeSprite = {
 
   idle: {
     row: 1,
-    maxColumns: 9,
+    maxColumns: 10,
   },
   sleep: {
     row: 2,
-    maxColumns: 8,
+    maxColumns: 10,
   },
 
   walking: {
@@ -84,6 +84,6 @@ export const doorSprite = {
 
   open: {
     row: 0,
-    maxColumns: 5,
+    maxColumns: 6,
   },
 };

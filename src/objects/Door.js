@@ -23,7 +23,7 @@ export class Door extends MoveableObject {
   }
 
   checkAnimationEnd() {
-    if (this.column >= this.sprite.maxColumns - 1) {
+    if (this.column >= this.sprite.maxColumns) {
       this.doorOpen = true;
     }
   }

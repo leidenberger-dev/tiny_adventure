@@ -49,12 +49,17 @@ export class Player extends MoveableObject {
         this.moveRight();
       }
     }
+    if (pressedKeys.attack && !this.isAttacking) {
+      this.isAttacking = true;
+    }
   }
 
   handleAttackAnimation() {
-    if (this.isAttacking && this.column >= this.maxColumns) {
+    if (this.isAttacking && this.column < this.spriteState.maxColumns - 1) {
+      this.animation(this.sprite.attack);
+      console.log(this.column);
+    } else {
       this.isAttacking = false;
-      this.column = 0;
     }
   }
 
@@ -63,6 +68,7 @@ export class Player extends MoveableObject {
       this.position.y -= this.jumpSpeed;
       this.jumpSpeed -= this.jumpAcceleration;
       this.totalJump += this.jumpSpeed;
+      this.animation(this.sprite.jumping);
     } else {
       if (!this.isOnGround) {
         this.isJumping = false;
@@ -79,10 +85,11 @@ export class Player extends MoveableObject {
   }
 
   handleIdleAndWalkingAnimations() {
+    if (this.isAttacking) {
+      return;
+    }
     if (pressedKeys.right || pressedKeys.left) {
       this.animation(this.sprite.walking);
-    } else if (pressedKeys.attack) {
-      this.animation(this.sprite.attack);
     } else {
       this.animation(this.sprite.idle);
     }
