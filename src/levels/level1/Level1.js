@@ -8,6 +8,7 @@ import { ctx } from "../../config/canvas.js";
 import { convertToBlackAndWhite } from "../../utils/imageUtils.js";
 
 const levelSettings = {
+  level: 1,
   mapJson: "./src/levels/level1/level1.json",
   map: "./assets/img/level1/mapLevel1.png",
   background: "./assets/img/bg.png",
@@ -29,6 +30,8 @@ export class Level1 extends Level {
   showStep2Counter = 0;
   showStep3Counter = 0;
   showStep4Counter = 0;
+  drawOnce = false;
+  isJavascriptCollected = false;
   constructor() {
     super(levelSettings);
     this.pepe = new Pepe(pepeSprite, this);
@@ -57,8 +60,8 @@ export class Level1 extends Level {
   }
 
   update() {
-    this.gravity.applyGravity();
-    this.collisionDetector.detectCollision();
+    this.gravity.applyGravity(this.level);
+    this.collisionDetector.detectCollisionLevel1();
     this.collectItem("html");
     this.collectItem("css");
     this.collectItem("javascript");
@@ -90,7 +93,9 @@ export class Level1 extends Level {
 
     this.signSteps();
 
-    this.switchDevMode();
+    if (!this.drawOnce) {
+      this.drawOnceAndPause();
+    }
   }
 
   signSteps() {
@@ -130,18 +135,6 @@ export class Level1 extends Level {
       this[item.showStep] = true;
       this[item.counter]++;
       this.pause = true;
-    }
-  }
-
-  switchDevMode() {
-    if (this.devMode) {
-      this.mapData.drawCollisionLayer(this.player.jumpHeight);
-      this.player.imageRectangle();
-      this.player.imageCollisionRectangle();
-      this.pepe.imageRectangle();
-      this.pepe.imageCollisionRectangle();
-      this.door.imageRectangle();
-      this.door.imageCollisionRectangle();
     }
   }
 }

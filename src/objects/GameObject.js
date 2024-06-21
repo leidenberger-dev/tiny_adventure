@@ -1,6 +1,10 @@
 import { ctx } from "../config/canvas.js";
+import { devMode } from "../core/Game.js";
 
 export class GameObject {
+  isLookingRight = true;
+  row = 0;
+  column = 0;
   constructor(sprite) {
     this.img = new Image();
     this.img.src = sprite.img;
@@ -12,11 +16,13 @@ export class GameObject {
     this.offsetWidth = sprite.offsetWidth;
     this.offsetHeight = sprite.offsetHeight;
     this.maxColumns = sprite.maxColumns;
+    this.mirrorPoint = sprite.mirrorPoint;
     this.row = 0;
     this.column = 0;
   }
 
   draw() {
+    this.isLookingRight = true;
     ctx.drawImage(
       this.img,
       this.column * this.frameWidth,
@@ -28,9 +34,14 @@ export class GameObject {
       this.frameWidth,
       this.frameHeight
     );
+    if (devMode) {
+      this.imageRectangle();
+      this.imageCollisionRectangle();
+    }
   }
 
   drawMirrored() {
+    this.isLookingRight = false;
     ctx.save(); // Speichern Sie den aktuellen Zustand des Kontexts
     ctx.scale(-1, 1); // Skalieren Sie den Kontext horizontal um -1
     ctx.drawImage(
@@ -39,12 +50,16 @@ export class GameObject {
       this.row * this.frameHeight,
       this.frameWidth,
       this.frameHeight,
-      -(this.position.x + this.frameWidth / 1.4), // Addieren Sie frameWidth zur x-Position vor dem Negieren
+      -(this.position.x + this.frameWidth / this.mirrorPoint), // Addieren Sie frameWidth zur x-Position vor dem Negieren
       this.position.y,
       this.frameWidth,
       this.frameHeight
     );
-    ctx.restore(); // Stellen Sie den ursprünglichen Zustand des Kontexts wieder her
+    ctx.restore();
+    if (devMode) {
+      this.imageRectangle();
+      this.imageCollisionRectangle();
+    }
   }
 
   imageRectangle() {

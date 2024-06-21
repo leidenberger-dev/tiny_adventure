@@ -1,19 +1,21 @@
 import { Level1 } from "../levels/level1/Level1.js";
+import { Level2 } from "../levels/level2/Level2.js";
 import { Renderer } from "./Renderer.js";
 import { pressedKeys } from "../config/keys.js";
 import { handleInput } from "./inputHandler.js";
+
+export let devMode = false;
 
 export class Game {
   constructor() {
     this.input = handleInput;
     this.input();
-    this.level = new Level1();
+    this.level = new Level2();
     this.renderer = new Renderer(this.level);
     this.isLoaded = false;
     this.loadLevel().then(() => {
       this.isLoaded = true;
       this.start();
-      this.drawOnceAndPause();
     });
   }
 
@@ -35,13 +37,8 @@ export class Game {
     return level;
   }
 
-  drawOnceAndPause() {
-    this.renderer.draw();
-    this.level.pause = true;
-  }
-
   devMode() {
-    this.level.setDevMode();
+    devMode = !devMode;
   }
 
   handlePause() {

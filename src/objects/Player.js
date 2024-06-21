@@ -16,6 +16,10 @@ export class Player extends MoveableObject {
     this.isOnGround = true;
     this.isFalling = false;
     this.isAttacking = false;
+    this.climbSpeed = 10;
+    this.isClimbing = false;
+    this.canUseLadder = false;
+    this.currentAnimation = "";
   }
 
   jump() {
@@ -35,9 +39,6 @@ export class Player extends MoveableObject {
     }
     if (!pressedKeys.up) {
       this.canJump = true;
-    }
-    if (!this.isOnGround && pressedKeys.down) {
-      this.position.y += this.speed;
     }
     if (pressedKeys.left) {
       if (this.position.x > 0) {
@@ -64,6 +65,10 @@ export class Player extends MoveableObject {
   }
 
   handleJumpAndFall() {
+    if (this.isClimbing) {
+      return;
+    }
+
     if (this.totalJump < this.jumpHeight) {
       this.position.y -= this.jumpSpeed;
       this.jumpSpeed -= this.jumpAcceleration;
@@ -95,9 +100,42 @@ export class Player extends MoveableObject {
     }
   }
 
+  handleClimbing() {
+    if (this.canUseLadder && pressedKeys.up) {
+      this.isClimbing = true;
+    } else if (!pressedKeys.up && this.isClimbing) {
+      this.isClimbing = false;
+      this.fallSpeed = 1;
+    }
+    this.isFalling = true;
+
+    if (this.isClimbing && this.canUseLadder) {
+      this.fallSpeed = 0;
+      this.totalJump = 500;
+      this.isFalling = false;
+      this.position.y -= this.climbSpeed;
+      this.canUseLadder = false;
+    } else {
+      this.isClimbing = false;
+      this.canUseLadder = false;
+      this.currentAnimation = "";
+    }
+  }
+
+  handleClimbingAnimation() {
+    console.log(this.isClimbing);
+    if (this.isClimbing) {
+      this.animation(this.sprite.climbing);
+    } else {
+      this.currentAnimation = "";
+    }
+  }
+
   update() {
     this.handleMovement();
     this.handleAttackAnimation();
     this.handleJumpAndFall();
+    this.handleClimbing();
+    this.handleClimbingAnimation();
   }
 }

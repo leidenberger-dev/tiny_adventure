@@ -12,6 +12,7 @@ export class MapData {
     this.javascript = new Image();
     this.javascript.src = "./assets/img/level1/javascript.png";
     this.mapJson = levelSettings.mapJson;
+    this.level = levelSettings.level;
     this.loadJson();
   }
   async loadJson() {
@@ -21,6 +22,9 @@ export class MapData {
       this.initializeLayers(mapData);
       this.drawCollisionLayer();
       this.drawItemsLayer();
+      if (this.level === 2) {
+        this.initializeLevel2Layers(mapData);
+      }
     } catch (error) {
       console.error("Error loading mapData", error);
     }
@@ -33,12 +37,16 @@ export class MapData {
     const itemsLayer = mapData.layers.find((layer) => layer.name === "items");
     this.collisionData = collisionLayer.data;
     this.itemsData = itemsLayer.data;
-
     // Map dimensions
     this.mapWidth = mapData.width;
     this.mapHeight = mapData.height;
     this.tileWidth = mapData.tilewidth;
     this.tileHeight = mapData.tileheight;
+  }
+
+  initializeLevel2Layers(mapData) {
+    const ladderLayer = mapData.layers.find((layer) => layer.name === "ladder");
+    this.ladderData = ladderLayer.data;
   }
 
   drawCollisionLayer(jumpHeight) {

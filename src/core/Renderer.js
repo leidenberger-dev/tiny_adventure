@@ -28,6 +28,7 @@ export class Renderer {
     ctx.translate(-this.camera.x, -this.camera.y);
     this.level.draw();
     this.drawPlayerBasedOnDirection();
+    this.level.drawForeground();
     ctx.restore();
   }
 

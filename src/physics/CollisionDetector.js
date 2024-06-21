@@ -9,7 +9,7 @@ export class CollisionDetector {
     this.door = door;
   }
 
-  detectCollision() {
+  detectCollisionLevel1() {
     this.player.isOnGround = false;
     const playerBounds = this.getPlayerBounds();
     const { collisionData, itemsData } = this.mapData;
@@ -18,6 +18,16 @@ export class CollisionDetector {
     this.detectItemCollisions(playerBounds, itemsData);
     this.detectPepeCollision(playerBounds, this.getPepeBounds());
     this.detectDoorCollision(playerBounds, this.getDoorBounds());
+  }
+
+  detectCollisionLevel2() {
+    this.player.isOnGround = false;
+    const playerBounds = this.getPlayerBounds();
+    const { collisionData, itemsData, ladderData } = this.mapData;
+
+    this.detectGroundCollisions(playerBounds, collisionData);
+    this.detectItemCollisions(playerBounds, itemsData);
+    this.detectLadderCollision(playerBounds, ladderData);
   }
 
   getPlayerBounds() {
@@ -128,7 +138,7 @@ export class CollisionDetector {
           tileHeight,
           jumpHeight
         );
-        if (this.isCollision(playerBounds, tileBounds)) {
+        if (this.isCollisionCenter(playerBounds, tileBounds)) {
           if (item === 147) {
             this.javascriptCollected = true;
           }
@@ -140,6 +150,29 @@ export class CollisionDetector {
           }
 
           this.mapData.itemsData[i] = 0;
+        }
+      }
+    });
+  }
+
+  detectLadderCollision(playerBounds, ladderData) {
+    const { mapWidth, tileWidth, tileHeight } = this.mapData;
+    const jumpHeight = this.player.jumpHeight;
+    this.ladderCollision = false;
+
+    ladderData.forEach((ladder, i) => {
+      if (ladder !== 0) {
+        const tileBounds = this.getTileBounds(
+          i,
+          mapWidth,
+          tileWidth,
+          tileHeight,
+          jumpHeight
+        );
+        if (this.isCollision(playerBounds, tileBounds)) {
+          if (ladder === 91) {
+            this.ladderCollision = true;
+          }
         }
       }
     });
@@ -160,6 +193,27 @@ export class CollisionDetector {
       playerBounds.top < tileBounds.bottom &&
       playerBounds.right < tileBounds.right &&
       playerBounds.left > tileBounds.left
+    );
+  }
+
+  isCollisionOutside(playerBounds, tileBounds) {
+    return (
+      playerBounds.bottom < tileBounds.top &&
+      playerBounds.top > tileBounds.bottom &&
+      playerBounds.right > tileBounds.right &&
+      playerBounds.left < tileBounds.left
+    );
+  }
+
+  isCollisionCenter(playerBounds, tileBounds) {
+    const playerCenterX = (playerBounds.left + playerBounds.right) / 2;
+    const playerCenterY = (playerBounds.top + playerBounds.bottom) / 2;
+
+    return (
+      playerCenterX > tileBounds.left &&
+      playerCenterX < tileBounds.right &&
+      playerCenterY > tileBounds.top &&
+      playerCenterY < tileBounds.bottom
     );
   }
 

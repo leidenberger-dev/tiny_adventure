@@ -3,7 +3,6 @@ import { GameObject } from "./GameObject.js";
 export class MoveableObject extends GameObject {
   counter = 0;
   speed = 1;
-  isLookingRight = true;
   isJumping = false;
   constructor(sprite) {
     super(sprite);
@@ -37,7 +36,7 @@ export class MoveableObject extends GameObject {
     this.counter++;
 
     if (spriteState === this.sprite.jumping) {
-      const accelerationFactor = 2.5;
+      const accelerationFactor = 1.7;
       const lastColumn = spriteState.maxColumns - 1;
 
       if (this.column < lastColumn) {

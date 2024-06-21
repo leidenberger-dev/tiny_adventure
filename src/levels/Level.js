@@ -9,11 +9,14 @@ export class Level {
   pause = false;
   devMode = false;
   cloudX = 1500;
+  isJavascriptCollected = true;
   constructor(levelSettings) {
     this.player = new Player(boySprite);
     this.map = new Image();
     this.map.src = levelSettings.map;
     mapWidth = this.map.width;
+    this.foreground = new Image();
+    this.foreground.src = levelSettings.foreground;
     this.background = new Image();
     this.background.src = levelSettings.background;
     this.clouds = new Image();
@@ -25,10 +28,6 @@ export class Level {
 
   update() {
     this.gravity.applyGravity();
-  }
-
-  setDevMode() {
-    this.devMode = !this.devMode;
   }
 
   drawBackground() {
@@ -65,7 +64,21 @@ export class Level {
   drawClouds() {
     const cloudY = 110;
     this.updateCloudPosition();
-    // Zeichnet die Wolkenbild an der aktuellen Position
     ctx.drawImage(this.clouds, this.cloudX, cloudY);
+  }
+
+  drawOnceAndPause() {
+    this.drawOnce = true;
+    this.pause = true;
+  }
+
+  ladderCollision() {
+    if (this.collisionDetector.ladderCollision) {
+      this.player.canUseLadder = true;
+    }
+  }
+
+  drawForeground() {
+    ctx.drawImage(this.foreground, 0, this.player.jumpHeight + 30);
   }
 }

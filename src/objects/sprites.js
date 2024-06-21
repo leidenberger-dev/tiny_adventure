@@ -1,51 +1,57 @@
 export const boySprite = {
   img: "../assets/img/boy.png",
-  frameWidth: 200,
+  frameWidth: 265.6,
   frameHeight: 250,
   maxColumns: 10,
-  offsetX: 35,
+  offsetX: 25,
   offsetY: 35,
-  offsetWidth: 125,
+  offsetWidth: 165,
   offsetHeight: 58,
-  animationSpeed: 5,
+  animationSpeed: 7,
+  mirrorPoint: 1.75,
 
   idle: {
     row: 1,
-    maxColumns: 10,
+    maxColumns: 4,
   },
   walking: {
     row: 0,
-    maxColumns: 10,
+    maxColumns: 4,
   },
   jumping: {
-    row: 6,
-    maxColumns: 10,
+    row: 2,
+    maxColumns: 6,
   },
   falling: {
-    row: 7,
-    maxColumns: 10,
+    row: 5,
+    maxColumns: 2,
   },
 
   attack: {
     row: 4,
-    maxColumns: 10,
+    maxColumns: 6,
+  },
+  climbing: {
+    row: 6,
+    maxColumns: 6,
   },
 };
 
 export const pepeSprite = {
   img: "../assets/img/pepe.png",
   position: {
-    x: 3350,
+    x: 3180,
     y: 1015,
   },
   frameWidth: 240.16,
   frameHeight: 472.44,
   maxColumns: 9,
-  offsetX: -60,
+  offsetX: 60,
   offsetY: 125,
   offsetWidth: 20,
-  offsetHeight: 58,
+  offsetHeight: 120,
   animationSpeed: 10,
+  mirrorPoint: 0.75,
 
   idle: {
     row: 1,
