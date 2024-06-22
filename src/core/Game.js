@@ -8,6 +8,7 @@ export let devMode = false;
 
 export class Game {
   constructor() {
+    this.checkDevMode();
     this.input = handleInput;
     this.input();
     this.level = new Level2();
@@ -38,7 +39,15 @@ export class Game {
   }
 
   devMode() {
-    devMode = !devMode;
+    let item = localStorage.getItem("devMode");
+    let isDevMode = item === "true";
+    localStorage.setItem("devMode", !isDevMode);
+    devMode = !isDevMode;
+  }
+
+  checkDevMode() {
+    let item = localStorage.getItem("devMode");
+    devMode = item === "true";
   }
 
   handlePause() {
