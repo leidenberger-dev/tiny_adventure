@@ -11,6 +11,7 @@ const levelSettings = {
   level: 1,
   mapJson: "./src/levels/level1/level1.json",
   map: "./assets/img/level1/mapLevel1.png",
+  foreground: "./assets/img/level1/mapLevel1Foreground.png",
   background: "./assets/img/bg.png",
   clouds: "./assets/img/clouds.png",
   startPoint: {
@@ -20,6 +21,14 @@ const levelSettings = {
 };
 
 export class Level1 extends Level {
+  pepePosition = {
+    x: 3180,
+    y: 1015,
+  };
+  doorPosition = {
+    x: 3310,
+    y: 1200,
+  };
   isHtmlCollected = false;
   isCssCollected = false;
   isJavascriptCollected = false;
@@ -34,8 +43,8 @@ export class Level1 extends Level {
   isJavascriptCollected = false;
   constructor() {
     super(levelSettings);
-    this.pepe = new Pepe(pepeSprite, this);
-    this.door = new Door(doorSprite);
+    this.pepe = new Pepe(pepeSprite, this.player, this, this.pepePosition);
+    this.door = new Door(doorSprite, this.player, this.doorPosition, this.pepe);
     this.signStep1 = new Image();
     this.signStep1.src = "./assets/img/level1/step1.png";
     this.signStep2 = new Image();
@@ -45,12 +54,7 @@ export class Level1 extends Level {
     this.signStep4 = new Image();
     this.signStep4.src = "./assets/img/level1/step4.png";
 
-    this.collisionDetector = new CollisionDetector(
-      this.mapData,
-      this.player,
-      this.pepe,
-      this.door
-    );
+    this.collisionDetector = new CollisionDetector(this.mapData, this.player);
     this.mapData.collisionDetector = this.collisionDetector;
     this.gravity = new Gravity(
       this.player,

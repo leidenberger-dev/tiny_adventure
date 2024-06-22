@@ -1,11 +1,13 @@
 import { ctx } from "../config/canvas.js";
 import { devMode } from "../core/Game.js";
+import { CollisionDetector } from "../physics/CollisionDetector.js";
 
 export class GameObject {
   isLookingRight = true;
   row = 0;
   column = 0;
-  constructor(sprite) {
+  constructor(sprite, player) {
+    this.player = player;
     this.img = new Image();
     this.img.src = sprite.img;
     this.position = sprite.position;
@@ -19,6 +21,7 @@ export class GameObject {
     this.mirrorPoint = sprite.mirrorPoint;
     this.row = 0;
     this.column = 0;
+    this.collisionDetector = new CollisionDetector();
   }
 
   draw() {
@@ -80,5 +83,14 @@ export class GameObject {
       this.frameWidth - this.offsetWidth,
       this.frameHeight - this.offsetHeight
     );
+  }
+
+  getBounds() {
+    return {
+      top: this.position.y + this.offsetY,
+      bottom: this.position.y + this.frameHeight - this.offsetHeight,
+      left: this.position.x + this.offsetX,
+      right: this.position.x + this.frameWidth - this.offsetWidth,
+    };
   }
 }

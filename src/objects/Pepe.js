@@ -1,18 +1,19 @@
 import { MoveableObject } from "./MoveableObject.js";
 
-export let pepeOpenDoor = false;
-
 export class Pepe extends MoveableObject {
   doorUnlocked = false;
-  targetX = this.position.x + 128;
-  constructor(sprite, level) {
-    super(sprite);
+  pepeOpenDoor = false;
+  constructor(sprite, player, level, position) {
+    super(sprite, player);
+    this.position = position;
+    this.targetX = this.position.x + 128;
     this.level = level;
     this.activeAnimation = () => {
       this.animation(this.sprite.sleep);
     };
   }
   update() {
+    this.detectCollision();
     this.checkJavascriptCollection();
     this.movementOpenDoor();
   }
@@ -52,8 +53,19 @@ export class Pepe extends MoveableObject {
     } else if (this.position.x >= this.targetX) {
       this.activeAnimation = () => {
         this.animation(this.sprite.idle);
-        pepeOpenDoor = true;
+        this.pepeOpenDoor = true;
       };
+    }
+  }
+
+  detectCollision() {
+    if (
+      this.collisionDetector.isCollision(
+        this.player.getBounds(),
+        this.getBounds()
+      )
+    ) {
+      this.collision = true;
     }
   }
 }

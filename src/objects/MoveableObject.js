@@ -4,8 +4,8 @@ export class MoveableObject extends GameObject {
   counter = 0;
   speed = 1;
   isJumping = false;
-  constructor(sprite) {
-    super(sprite);
+  constructor(sprite, player) {
+    super(sprite, player);
     this.sprite = sprite;
     this.animationSpeed = this.sprite.animationSpeed;
   }

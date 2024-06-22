@@ -1,17 +1,19 @@
 import { MoveableObject } from "./MoveableObject.js";
-import { pepeOpenDoor } from "./Pepe.js";
 export class Door extends MoveableObject {
   collision = false;
   doorOpen = false;
 
-  constructor(sprite) {
-    super(sprite);
+  constructor(sprite, player, position, pepe) {
+    super(sprite, player);
+    this.position = position;
+    this.pepe = pepe;
   }
 
   update() {
+    this.detectCollision();
     if (this.doorOpen) return;
 
-    if (pepeOpenDoor) {
+    if (this.pepe.pepeOpenDoor) {
       this.animateDoorOpening();
     }
 
@@ -25,6 +27,18 @@ export class Door extends MoveableObject {
   checkAnimationEnd() {
     if (this.column >= this.sprite.maxColumns) {
       this.doorOpen = true;
+    }
+  }
+
+  detectCollision() {
+    if (
+      this.collisionDetector.isCollisionInside(
+        this.player.getBounds(),
+        this.getBounds()
+      ) &&
+      this.pepe.pepeOpenDoor
+    ) {
+      this.collision = true;
     }
   }
 }

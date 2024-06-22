@@ -58,7 +58,6 @@ export class Player extends MoveableObject {
   handleAttackAnimation() {
     if (this.isAttacking && this.column < this.spriteState.maxColumns - 1) {
       this.animation(this.sprite.attack);
-      console.log(this.column);
     } else {
       this.isAttacking = false;
     }
@@ -123,7 +122,6 @@ export class Player extends MoveableObject {
   }
 
   handleClimbingAnimation() {
-    console.log(this.isClimbing);
     if (this.isClimbing) {
       this.animation(this.sprite.climbing);
     } else {
