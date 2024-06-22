@@ -93,3 +93,35 @@ export const doorSprite = {
     maxColumns: 6,
   },
 };
+
+export const wolfSprite = {
+  img: "../assets/img/wolf.png",
+  position: {
+    x: 3310,
+    y: 1200,
+  },
+  frameWidth: 410.5,
+  frameHeight: 234.5,
+  maxColumns: 5,
+  offsetX: 20,
+  offsetY: 70,
+  offsetWidth: 100,
+  offsetHeight: 85,
+  animationSpeed: 7,
+  mirrorPoint: 1.2,
+
+  idle: {
+    row: 0,
+    maxColumns: 3,
+  },
+
+  walk: {
+    row: 1,
+    maxColumns: 4,
+  },
+
+  attack: {
+    row: 2,
+    maxColumns: 7,
+  },
+};
