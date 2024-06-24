@@ -16,6 +16,7 @@ export class Player extends MoveableObject {
     this.isOnGround = true;
     this.isFalling = false;
     this.isAttacking = false;
+    this.isShooting = false;
     this.climbSpeed = 10;
     this.isClimbing = false;
     this.canUseLadder = false;
@@ -32,6 +33,9 @@ export class Player extends MoveableObject {
   }
 
   handleMovement() {
+    if (this.isAttacking || this.isShooting) {
+      return;
+    }
     if (pressedKeys.up && this.canJump) {
       this.jump();
       this.canJump = false;
@@ -50,8 +54,14 @@ export class Player extends MoveableObject {
         this.moveRight();
       }
     }
+  }
+
+  handleAttacks() {
     if (pressedKeys.attack && !this.isAttacking) {
       this.isAttacking = true;
+    }
+    if (pressedKeys.shoot && !this.isShooting) {
+      this.isShooting = true;
     }
   }
 
@@ -60,6 +70,14 @@ export class Player extends MoveableObject {
       this.animation(this.sprite.attack);
     } else {
       this.isAttacking = false;
+    }
+  }
+
+  handleShootAnimation() {
+    if (this.isShooting && this.column < this.spriteState.maxColumns - 1) {
+      this.animation(this.sprite.shooting);
+    } else {
+      this.isShooting = false;
     }
   }
 
@@ -89,7 +107,7 @@ export class Player extends MoveableObject {
   }
 
   handleIdleAndWalkingAnimations() {
-    if (this.isAttacking) {
+    if (this.isAttacking || this.isShooting) {
       return;
     }
     if (pressedKeys.right || pressedKeys.left) {
@@ -131,7 +149,9 @@ export class Player extends MoveableObject {
 
   update() {
     this.handleMovement();
+    this.handleAttacks();
     this.handleAttackAnimation();
+    this.handleShootAnimation();
     this.handleJumpAndFall();
     this.handleClimbing();
     this.handleClimbingAnimation();

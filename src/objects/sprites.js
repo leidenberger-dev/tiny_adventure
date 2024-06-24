@@ -35,6 +35,16 @@ export const boySprite = {
     row: 6,
     maxColumns: 6,
   },
+
+  shooting: {
+    row: 8,
+    maxColumns: 9,
+  },
+
+  hurt: {
+    row: 9,
+    maxColumns: 5,
+  },
 };
 
 export const pepeSprite = {
