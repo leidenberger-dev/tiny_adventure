@@ -39,6 +39,8 @@ export class Door extends MoveableObject {
       this.pepe.pepeOpenDoor
     ) {
       this.collision = true;
+    } else {
+      this.collision = false;
     }
   }
 }
