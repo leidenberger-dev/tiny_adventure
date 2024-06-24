@@ -18,6 +18,7 @@ export class Enemy extends MoveableObject {
     this.hasTakenDamage = false;
     this.damageAmount = 30;
     this.isDead = false;
+    this.deleteDraw = false;
     this.walkRoute = position.walkRoute;
     this.walkDistance = 0;
     this.idleTime = 0;
@@ -70,7 +71,6 @@ export class Enemy extends MoveableObject {
   handleIdleState() {
     this.idleState(); // Verwenden Sie die vorhandene idleState-Methode
     this.idleTime += 1;
-    console.log(this.idleTime);
 
     if (this.idleTime >= 60) {
       // Zufällige Idle-Zeit zwischen 50 und 150 Frames
@@ -88,8 +88,15 @@ export class Enemy extends MoveableObject {
     if (this.column < this.sprite.dead.maxColumns - 1) {
       this.animation(this.sprite.dead);
     } else {
+      if (this.deleteDraw) {
+        this.column = this.sprite.dead.maxColumns;
+        return;
+      }
       this.animation(this.sprite.dead);
       this.column = this.sprite.dead.maxColumns - 1;
+      setTimeout(() => {
+        this.deleteDraw = true;
+      }, 2000);
     }
   }
 
@@ -142,13 +149,14 @@ export class Enemy extends MoveableObject {
   }
 
   drawHealthBar() {
+    const offsetX = 50;
     if (this.isDead) {
       return;
     }
     // Hintergrund der Lebensleiste zeichnen
     this.ctx.fillStyle = "gray";
     this.ctx.fillRect(
-      this.position.x,
+      this.position.x + offsetX,
       this.position.y + this.healthBarPosition.barOffsetY,
       this.healthBarPosition.width,
       this.healthBarPosition.barHeight
@@ -161,7 +169,7 @@ export class Enemy extends MoveableObject {
     this.ctx.fillStyle = color;
     let barWidth = this.healthBarPosition.width * healthPercentage;
     this.ctx.fillRect(
-      this.position.x,
+      this.position.x + offsetX,
       this.position.y + this.healthBarPosition.barOffsetY,
       barWidth,
       this.healthBarPosition.barHeight
