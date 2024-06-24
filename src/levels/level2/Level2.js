@@ -3,9 +3,17 @@ import { CollisionDetector } from "../../physics/CollisionDetector.js";
 import { Gravity } from "../../physics/Gravity.js";
 import { ctx } from "../../config/canvas.js";
 import { Door } from "../../objects/Door.js";
-import { doorSprite, pepeSprite, wolfSprite } from "../../objects/sprites.js";
+import {
+  bearSprite,
+  bisonSprite,
+  doorSprite,
+  pepeSprite,
+  wolfSprite,
+} from "../../objects/sprites.js";
 import { Pepe } from "../../objects/Pepe.js";
 import { Wolf } from "../../objects/Wolf.js";
+import { Bison } from "../../objects/Bison.js";
+import { Bear } from "../../objects/Bear.js";
 
 const levelSettings = {
   level: 2,
@@ -23,8 +31,12 @@ const levelSettings = {
 export class Level2 extends Level {
   doorPosition = { x: 560, y: 815 };
   pepePosition = { x: 400, y: 625 };
-  wolf1Position = { x: 1380, y: 1245 };
-  wolf2Position = { x: 1500, y: 1245 };
+  wolf1Data = { x: 1120, y: 1245, walkRoute: 50 };
+  wolf2Data = { x: 2640, y: 730, walkRoute: 120 };
+  bisonData = { x: 2400, y: 1190, walkRoute: 150 };
+  bison2Data = { x: 2000, y: 170, walkRoute: 80 };
+  bearData = { x: 1200, y: 280, walkRoute: 130 };
+
   constructor() {
     super(levelSettings);
 
@@ -38,18 +50,11 @@ export class Level2 extends Level {
     this.pepe = new Pepe(pepeSprite, this.player, this, this.pepePosition);
     this.pepe.targetX = this.pepe.position.x + 5;
     this.door = new Door(doorSprite, this.player, this.doorPosition, this.pepe);
-    this.wolf = new Wolf(
-      wolfSprite,
-      this.player,
-      this.wolf1Position,
-      this.player
-    );
-    this.wolf2 = new Wolf(
-      wolfSprite,
-      this.player,
-      this.wolf2Position,
-      this.player
-    );
+    this.wolf = new Wolf(wolfSprite, this.player, this.wolf1Data);
+    this.wolf2 = new Wolf(wolfSprite, this.player, this.wolf2Data);
+    this.bison = new Bison(bisonSprite, this.player, this.bisonData);
+    this.bison2 = new Bison(bisonSprite, this.player, this.bison2Data);
+    this.bear = new Bear(bearSprite, this.player, this.bearData);
   }
 
   update() {
@@ -60,6 +65,9 @@ export class Level2 extends Level {
     this.door.update();
     this.wolf.update();
     this.wolf2.update();
+    this.bison.update();
+    this.bison2.update();
+    this.bear.update();
   }
 
   draw() {
@@ -71,7 +79,11 @@ export class Level2 extends Level {
 
     this.door.draw();
     this.pepe.draw();
-    this.wolf.waitAndAttack();
+    this.bison.drawWithWalkRoute();
+    this.bison2.drawWithWalkRoute();
+    this.wolf.drawWithWalkRoute();
+    this.wolf2.drawWithWalkRoute();
+    this.bear.drawWithWalkRoute();
 
     this.switchDevMode();
   }

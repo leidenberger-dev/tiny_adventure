@@ -7,6 +7,7 @@ export class GameObject {
   row = 0;
   column = 0;
   constructor(sprite, player) {
+    this.ctx = ctx;
     this.player = player;
     this.img = new Image();
     this.img.src = sprite.img;

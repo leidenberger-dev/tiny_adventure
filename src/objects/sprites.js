@@ -107,7 +107,7 @@ export const wolfSprite = {
   offsetY: 70,
   offsetWidth: 100,
   offsetHeight: 85,
-  animationSpeed: 7,
+  animationSpeed: 5,
   mirrorPoint: 1.2,
 
   idle: {
@@ -123,5 +123,84 @@ export const wolfSprite = {
   attack: {
     row: 2,
     maxColumns: 7,
+  },
+
+  dead: {
+    row: 3,
+    maxColumns: 5,
+  },
+};
+
+export const bisonSprite = {
+  img: "../assets/img/bison.png",
+  position: {
+    x: 3310,
+    y: 1200,
+  },
+  frameWidth: 430.5,
+  frameHeight: 294,
+  maxColumns: 4,
+  offsetX: 20,
+  offsetY: 70,
+  offsetWidth: 100,
+  offsetHeight: 85,
+  animationSpeed: 8,
+  mirrorPoint: 1.2,
+
+  idle: {
+    row: 0,
+    maxColumns: 3,
+  },
+
+  walk: {
+    row: 1,
+    maxColumns: 4,
+  },
+
+  attack: {
+    row: 2,
+    maxColumns: 4,
+  },
+
+  dead: {
+    row: 3,
+    maxColumns: 5,
+  },
+};
+
+export const bearSprite = {
+  img: "../assets/img/bear.png",
+  position: {
+    x: 3310,
+    y: 1200,
+  },
+  frameWidth: 518.5,
+  frameHeight: 464,
+  maxColumns: 4,
+  offsetX: 20,
+  offsetY: 70,
+  offsetWidth: 100,
+  offsetHeight: 85,
+  animationSpeed: 10,
+  mirrorPoint: 1.2,
+
+  idle: {
+    row: 0,
+    maxColumns: 3,
+  },
+
+  walk: {
+    row: 1,
+    maxColumns: 4,
+  },
+
+  attack: {
+    row: 2,
+    maxColumns: 5,
+  },
+
+  dead: {
+    row: 3,
+    maxColumns: 6,
   },
 };
