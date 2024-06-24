@@ -20,7 +20,6 @@ export class Player extends MoveableObject {
     this.climbSpeed = 10;
     this.isClimbing = false;
     this.canUseLadder = false;
-    this.currentAnimation = "";
   }
 
   jump() {

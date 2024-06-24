@@ -150,9 +150,9 @@ export const bisonSprite = {
   frameWidth: 430.5,
   frameHeight: 294,
   maxColumns: 4,
-  offsetX: 20,
+  offsetX: 40,
   offsetY: 70,
-  offsetWidth: 100,
+  offsetWidth: 150,
   offsetHeight: 85,
   animationSpeed: 8,
   mirrorPoint: 1.2,
@@ -187,12 +187,12 @@ export const bearSprite = {
   frameWidth: 518.5,
   frameHeight: 464,
   maxColumns: 4,
-  offsetX: 20,
-  offsetY: 70,
-  offsetWidth: 100,
+  offsetX: 70,
+  offsetY: 90,
+  offsetWidth: 270,
   offsetHeight: 85,
   animationSpeed: 10,
-  mirrorPoint: 1.2,
+  mirrorPoint: 1.35,
 
   idle: {
     row: 0,
@@ -212,5 +212,27 @@ export const bearSprite = {
   dead: {
     row: 3,
     maxColumns: 6,
+  },
+};
+
+export const arrowSprite = {
+  img: "../assets/img/arrow.png",
+  position: {
+    x: 3310,
+    y: 1200,
+  },
+  frameWidth: 126,
+  frameHeight: 17,
+  maxColumns: 4,
+  offsetX: 0,
+  offsetY: 0,
+  offsetWidth: 0,
+  offsetHeight: 0,
+  animationSpeed: 8,
+  mirrorPoint: 1.2,
+
+  arrow: {
+    row: 0,
+    maxColumns: 0,
   },
 };

@@ -55,6 +55,7 @@ export class Level2 extends Level {
     this.bison = new Bison(bisonSprite, this.player, this.bisonData);
     this.bison2 = new Bison(bisonSprite, this.player, this.bison2Data);
     this.bear = new Bear(bearSprite, this.player, this.bearData);
+    this.enemies = [this.wolf, this.wolf2, this.bison, this.bison2, this.bear];
   }
 
   update() {
@@ -63,11 +64,8 @@ export class Level2 extends Level {
     this.ladderCollision();
     this.pepe.update();
     this.door.update();
-    this.wolf.update();
-    this.wolf2.update();
-    this.bison.update();
-    this.bison2.update();
-    this.bear.update();
+    this.enemies.forEach((enemy) => enemy.update());
+    this.arrow.update(this.enemies);
   }
 
   draw() {
@@ -79,11 +77,8 @@ export class Level2 extends Level {
 
     this.door.draw();
     this.pepe.draw();
-    this.bison.drawWithWalkRoute();
-    this.bison2.drawWithWalkRoute();
-    this.wolf.drawWithWalkRoute();
-    this.wolf2.drawWithWalkRoute();
-    this.bear.drawWithWalkRoute();
+    this.enemies.forEach((enemy) => enemy.drawWithWalkRoute());
+    this.arrow.drawArrow();
 
     this.switchDevMode();
   }

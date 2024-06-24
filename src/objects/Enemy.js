@@ -137,7 +137,15 @@ export class Enemy extends MoveableObject {
     }
   }
 
-  takeDamage() {
+  takeDamage(shoot) {
+    if (shoot) {
+      this.health -= this.damageAmount;
+      this.hasTakenDamage = true;
+      if (this.health < 0) {
+        this.health = 0;
+        this.isDead = true;
+      }
+    }
     if (this.collision && this.player.isAttacking && !this.hasTakenDamage) {
       this.health -= this.damageAmount;
       this.hasTakenDamage = true;

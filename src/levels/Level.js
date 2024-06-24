@@ -1,7 +1,8 @@
 import { Player } from "../objects/Player.js";
-import { boySprite } from "../objects/sprites.js";
+import { arrowSprite, boySprite } from "../objects/sprites.js";
 import { ctx } from "../config/canvas.js";
 import { MapData } from "./MapData.js";
+import { Arrow } from "../objects/Arrow.js";
 
 export let mapWidth = 0;
 
@@ -24,6 +25,7 @@ export class Level {
     this.player.position = levelSettings.startPoint;
     this.mapJson = levelSettings.mapJson;
     this.mapData = new MapData(levelSettings);
+    this.arrow = new Arrow(arrowSprite, this.player);
   }
 
   update() {
