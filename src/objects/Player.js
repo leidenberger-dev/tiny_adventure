@@ -67,10 +67,10 @@ export class Player extends MoveableObject {
   }
 
   handleAttacks() {
-    if (pressedKeys.attack && !this.isAttacking) {
+    if (pressedKeys.attack && !this.isAttacking && !this.isShooting) {
       this.isAttacking = true;
     }
-    if (pressedKeys.shoot && !this.isShooting) {
+    if (pressedKeys.shoot && !this.isShooting && !this.isAttacking) {
       this.isShooting = true;
     }
   }
