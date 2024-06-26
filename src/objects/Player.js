@@ -5,6 +5,7 @@ import { mapWidth } from "../levels/Level.js";
 export class Player extends MoveableObject {
   constructor(sprite) {
     super(sprite);
+    this.health = 100;
     this.jumpHeight = 300;
     this.speed = 8;
     this.jumpSpeed = null;
@@ -20,6 +21,16 @@ export class Player extends MoveableObject {
     this.climbSpeed = 10;
     this.isClimbing = false;
     this.canUseLadder = false;
+  }
+
+  update() {
+    this.handleMovement();
+    this.handleAttacks();
+    this.handleAttackAnimation();
+    this.handleShootAnimation();
+    this.handleJumpAndFall();
+    this.handleClimbing();
+    this.handleClimbingAnimation();
   }
 
   jump() {
@@ -144,15 +155,5 @@ export class Player extends MoveableObject {
     } else {
       this.currentAnimation = "";
     }
-  }
-
-  update() {
-    this.handleMovement();
-    this.handleAttacks();
-    this.handleAttackAnimation();
-    this.handleShootAnimation();
-    this.handleJumpAndFall();
-    this.handleClimbing();
-    this.handleClimbingAnimation();
   }
 }

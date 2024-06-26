@@ -54,7 +54,6 @@ export class Enemy extends MoveableObject {
 
   handleWalkingState() {
     this.animation(this.sprite.walk);
-    // Bewegung in die aktuelle Orientierung
     if (this.isLookingRight) {
       this.moveRight();
     } else {
@@ -64,24 +63,23 @@ export class Enemy extends MoveableObject {
 
     if (this.walkDistance >= this.walkRoute) {
       this.walkDistance = 0;
-      this.state = "idle"; // Wechsel zum Idle-Zustand
+      this.state = "idle";
     }
   }
 
   handleIdleState() {
-    this.idleState(); // Verwenden Sie die vorhandene idleState-Methode
+    this.idleState();
     this.idleTime += 1;
 
     if (this.idleTime >= 60) {
-      // Zufällige Idle-Zeit zwischen 50 und 150 Frames
       this.idleTime = 0;
-      this.state = "changingOrientation"; // Wechsel zum Orientierungswechsel
+      this.state = "changingOrientation";
     }
   }
 
   changeOrientation() {
-    this.isLookingRight = !this.isLookingRight; // Orientierung ändern
-    this.state = "walking"; // Zurück zum Gehen
+    this.isLookingRight = !this.isLookingRight;
+    this.state = "walking";
   }
 
   handleDeathAnimation() {

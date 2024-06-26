@@ -11,7 +11,7 @@ export class GameObject {
     this.player = player;
     this.img = new Image();
     this.img.src = sprite.img;
-    this.position = sprite.position;
+    this.position = { ...sprite.position };
     this.frameWidth = sprite.frameWidth;
     this.frameHeight = sprite.frameHeight;
     this.offsetX = sprite.offsetX;

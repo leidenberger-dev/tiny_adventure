@@ -1,10 +1,12 @@
 import { canvas, ctx } from "../config/canvas.js";
 import { Camera } from "./Camera.js";
+import { Gui } from "./Gui.js";
 
 export class Renderer {
   constructor(level) {
     this.level = level;
     this.camera = new Camera(this.level.player, this.level);
+    this.gui = new Gui();
   }
 
   update() {
@@ -20,6 +22,7 @@ export class Renderer {
 
     this.update();
     this.drawScene();
+    this.gui.draw();
   }
 
   drawScene() {

@@ -236,3 +236,54 @@ export const arrowSprite = {
     maxColumns: 0,
   },
 };
+
+export const barsSprite = {
+  img: "../assets/img/bars.png",
+  position: {
+    x: 0,
+    y: 0,
+  },
+  frameWidth: 297.5,
+  frameHeight: 79,
+  maxColumns: 5,
+  offsetX: 20,
+  offsetY: 70,
+  offsetWidth: 100,
+  offsetHeight: 85,
+  animationSpeed: 5,
+  mirrorPoint: 1.2,
+};
+
+export const buttonsSprite = {
+  img: "../assets/img/buttons.png",
+  position: {
+    x: 0,
+    y: 0,
+  },
+  frameWidth: 106,
+  frameHeight: 110,
+  maxColumns: 5,
+  offsetX: 20,
+  offsetY: 70,
+  offsetWidth: 100,
+  offsetHeight: 85,
+  animationSpeed: 5,
+  mirrorPoint: 1.2,
+};
+
+export const mobileButtonsSprite = {
+  img: "../assets/img/mobilebuttons.png",
+  position: {
+    x: 0,
+    y: 0,
+  },
+  frameWidth: 102.6,
+  frameHeight: 110,
+  maxColumns: 5,
+  offsetX: 20,
+  offsetY: 70,
+  offsetWidth: 100,
+  offsetHeight: 85,
+  animationSpeed: 5,
+  mirrorPoint: 1.2,
+};
