@@ -12,6 +12,7 @@ export class Renderer {
   update() {
     this.camera.update();
     this.level.player.update();
+    this.gui.update(this.level);
   }
 
   draw() {

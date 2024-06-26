@@ -61,6 +61,7 @@ export class Level1 extends Level {
       this.mapData,
       this.collisionDetector
     );
+    this.player.data.arrows = 0;
   }
 
   update() {

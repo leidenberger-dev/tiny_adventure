@@ -13,6 +13,7 @@ export class Level {
   isJavascriptCollected = true;
   constructor(levelSettings) {
     this.player = new Player(boySprite);
+    this.levelNumber = levelSettings.level;
     this.map = new Image();
     this.map.src = levelSettings.map;
     mapWidth = this.map.width;
@@ -26,6 +27,7 @@ export class Level {
     this.mapJson = levelSettings.mapJson;
     this.mapData = new MapData(levelSettings);
     this.arrow = new Arrow(arrowSprite, this.player);
+    this.maxPoints = levelSettings.maxPoints;
   }
 
   update() {

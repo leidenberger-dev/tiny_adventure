@@ -1,12 +1,17 @@
 import { GameObject } from "../objects/GameObject.js";
+import { Player } from "../objects/Player.js";
 import {
+  arrowsAmountSprite,
   barsSprite,
+  boySprite,
   buttonsSprite,
   mobileButtonsSprite,
 } from "../objects/sprites.js";
+import { ctx } from "../config/canvas.js";
 
 export class Gui {
   constructor() {
+    this.player = new Player(boySprite);
     this.healthbar = new GameObject(barsSprite);
     this.healthbar.column = 5;
     this.pointsbar = new GameObject(barsSprite);
@@ -64,11 +69,29 @@ export class Gui {
       x: 1100,
       y: 450,
     };
+
+    this.arrowsAmount = new GameObject(arrowsAmountSprite);
+    this.arrowsAmount.position = {
+      x: 600,
+      y: 0,
+    };
+  }
+
+  update(maxPoints) {
+    this.maxPoints = maxPoints.maxPoints;
+    this.levelNumber = maxPoints.levelNumber;
+    this.handleCollectPoint(this.maxPoints);
   }
 
   draw() {
-    this.healthbar.draw();
-    this.pointsbar.draw();
+    if (this.levelNumber > 1) {
+      this.healthbar.draw();
+      this.pointsbar.draw();
+      this.drawPointsNumber();
+      this.arrowsAmount.draw();
+      this.drawArrowsNumber();
+    }
+
     this.soundButton.draw();
     this.pauseButton.draw();
     this.menuButton.draw();
@@ -79,5 +102,30 @@ export class Gui {
     this.mobileAButton.draw();
   }
 
-  mobileButtons() {}
+  handleCollectPoint(maxPoints) {
+    const percentage = (this.player.data.points / maxPoints) * 100;
+    if (percentage >= 20) this.pointsbar.column = 1;
+    if (percentage >= 40) this.pointsbar.column = 2;
+    if (percentage >= 60) this.pointsbar.column = 3;
+    if (percentage >= 80) this.pointsbar.column = 4;
+    if (percentage === 100) this.pointsbar.column = 5;
+  }
+
+  drawArrowsNumber() {
+    ctx.font = `bold 50px "Comic Sans MS"`;
+    ctx.fillStyle = "white";
+    ctx.fillText(this.player.data.arrows, 685, 67);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 3;
+    ctx.strokeText(this.player.data.arrows, 685, 67);
+  }
+
+  drawPointsNumber() {
+    ctx.font = `bold 50px "Comic Sans MS"`;
+    ctx.fillStyle = "white";
+    ctx.fillText(this.player.data.points, 460, 67);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 3;
+    ctx.strokeText(this.player.data.points, 460, 67);
+  }
 }

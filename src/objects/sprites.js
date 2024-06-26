@@ -287,3 +287,20 @@ export const mobileButtonsSprite = {
   animationSpeed: 5,
   mirrorPoint: 1.2,
 };
+
+export const arrowsAmountSprite = {
+  img: "../assets/img/arrows-amount.png",
+  position: {
+    x: 0,
+    y: 0,
+  },
+  frameWidth: 165,
+  frameHeight: 79,
+  maxColumns: 5,
+  offsetX: 20,
+  offsetY: 70,
+  offsetWidth: 100,
+  offsetHeight: 85,
+  animationSpeed: 5,
+  mirrorPoint: 1.2,
+};

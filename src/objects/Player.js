@@ -2,10 +2,14 @@ import { MoveableObject } from "./MoveableObject.js";
 import { pressedKeys } from "../config/keys.js";
 import { mapWidth } from "../levels/Level.js";
 
+const dataSymbol = Symbol("data");
 export class Player extends MoveableObject {
   constructor(sprite) {
     super(sprite);
-    this.health = 100;
+    if (!Player[dataSymbol]) {
+      Player[dataSymbol] = { health: 100, points: 0, arrows: 5 };
+    }
+    this.data = Player[dataSymbol];
     this.jumpHeight = 300;
     this.speed = 8;
     this.jumpSpeed = null;
@@ -71,7 +75,11 @@ export class Player extends MoveableObject {
       this.isAttacking = true;
     }
     if (pressedKeys.shoot && !this.isShooting && !this.isAttacking) {
+      if (this.data.arrows < 1) {
+        return;
+      }
       this.isShooting = true;
+      this.data.arrows--;
     }
   }
 

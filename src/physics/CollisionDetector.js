@@ -108,6 +108,15 @@ export class CollisionDetector {
           if (item === 149) {
             this.cssCollected = true;
           }
+          if (item === 185) {
+            this.player.data.points++;
+          }
+          if (item === 209) {
+            this.player.data.arrows += 3;
+          }
+          if (item === 184) {
+            this.player.data.health = 100;
+          }
 
           this.mapData.itemsData[i] = 0;
         }

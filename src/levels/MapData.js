@@ -11,6 +11,12 @@ export class MapData {
     this.html.src = "./assets/img/level1/html.png";
     this.javascript = new Image();
     this.javascript.src = "./assets/img/level1/javascript.png";
+    this.health = new Image();
+    this.health.src = "./assets/img/level2/health.png";
+    this.point = new Image();
+    this.point.src = "./assets/img/level2/point.png";
+    this.arrows = new Image();
+    this.arrows.src = "./assets/img/level2/arrows.png";
     this.mapJson = levelSettings.mapJson;
     this.level = levelSettings.level;
     this.loadJson();
@@ -71,6 +77,15 @@ export class MapData {
       const y = Math.floor(i / this.mapWidth) * this.tileHeight + jumpHeight;
       let image;
       switch (this.itemsData[i]) {
+        case 184:
+          image = this.health;
+          break;
+        case 185:
+          image = this.point;
+          break;
+        case 209:
+          image = this.arrows;
+          break;
         case 147:
           image = this.javascript;
           break;

@@ -26,6 +26,7 @@ const levelSettings = {
     x: 550,
     y: 1200,
   },
+  maxPoints: 10,
 };
 
 export class Level2 extends Level {
@@ -40,13 +41,6 @@ export class Level2 extends Level {
   constructor() {
     super(levelSettings);
 
-    this.collisionDetector = new CollisionDetector(this.mapData, this.player);
-    this.mapData.collisionDetector = this.collisionDetector;
-    this.gravity = new Gravity(
-      this.player,
-      this.mapData,
-      this.collisionDetector
-    );
     this.pepe = new Pepe(pepeSprite, this.player, this, this.pepePosition);
     this.pepe.targetX = this.pepe.position.x + 5;
     this.door = new Door(doorSprite, this.player, this.doorPosition, this.pepe);
@@ -56,6 +50,14 @@ export class Level2 extends Level {
     this.bison2 = new Bison(bisonSprite, this.player, this.bison2Data);
     this.bear = new Bear(bearSprite, this.player, this.bearData);
     this.enemies = [this.wolf, this.wolf2, this.bison, this.bison2, this.bear];
+    this.collisionDetector = new CollisionDetector(this.mapData, this.player);
+    this.mapData.collisionDetector = this.collisionDetector;
+    this.gravity = new Gravity(
+      this.player,
+      this.mapData,
+      this.collisionDetector
+    );
+    this.player.data.arrows = 5;
   }
 
   update() {
@@ -76,11 +78,16 @@ export class Level2 extends Level {
     ctx.drawImage(this.map, 0, this.player.jumpHeight);
 
     this.door.draw();
+    this.mapData.drawItemsLayer(this.player.jumpHeight);
     this.pepe.draw();
     this.enemies.forEach((enemy) => enemy.drawWithWalkRoute());
     this.arrow.drawArrow();
 
     this.switchDevMode();
+  }
+
+  collectItem() {
+    this.collisionDetector();
   }
 
   switchDevMode() {
