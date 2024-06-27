@@ -23,6 +23,7 @@ export class GameObject {
     this.row = 0;
     this.column = 0;
     this.collisionDetector = new CollisionDetector();
+    this.devModeVisual = false;
   }
 
   draw() {
@@ -38,7 +39,7 @@ export class GameObject {
       this.frameWidth,
       this.frameHeight
     );
-    if (devMode) {
+    if (devMode && this.devModeVisual) {
       this.imageRectangle();
       this.imageCollisionRectangle();
     }

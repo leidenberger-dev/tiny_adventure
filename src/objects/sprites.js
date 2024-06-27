@@ -5,10 +5,10 @@ export const boySprite = {
   maxColumns: 10,
   offsetX: 25,
   offsetY: 35,
-  offsetWidth: 165,
+  offsetWidth: 140,
   offsetHeight: 58,
   animationSpeed: 7,
-  mirrorPoint: 1.75,
+  mirrorPoint: 1.5,
 
   idle: {
     row: 1,
@@ -44,6 +44,11 @@ export const boySprite = {
   hurt: {
     row: 9,
     maxColumns: 5,
+  },
+
+  dead: {
+    row: 7,
+    maxColumns: 7,
   },
 };
 

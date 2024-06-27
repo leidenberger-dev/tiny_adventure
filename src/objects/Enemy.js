@@ -23,11 +23,15 @@ export class Enemy extends MoveableObject {
     this.walkDistance = 0;
     this.idleTime = 0;
     this.state = "walking";
+    this.canAttack = false;
+    this.lastAttackTime = 0;
   }
 
   update() {
     this.switchState();
     this.detectCollision();
+    this.detectCollisionWithPlayerHead();
+    this.attacking();
     this.takeDamage();
     if (!this.player.isAttacking) {
       this.hasTakenDamage = false;
@@ -35,6 +39,9 @@ export class Enemy extends MoveableObject {
   }
 
   switchState() {
+    if (this.canAttack) {
+      return;
+    }
     if (!this.isDead) {
       switch (this.state) {
         case "walking":
@@ -98,12 +105,6 @@ export class Enemy extends MoveableObject {
     }
   }
 
-  prepareForAttack() {
-    this.drawCorrectOrientation();
-    this.animation(this.sprite.attack);
-    this.offsetX = this.damageBoxAttacking.x;
-  }
-
   drawWithWalkRoute() {
     this.drawCorrectOrientation();
   }
@@ -132,6 +133,25 @@ export class Enemy extends MoveableObject {
       this.collision = true;
     } else {
       this.collision = false;
+    }
+  }
+
+  detectCollisionWithPlayerHead() {
+    const now = Date.now();
+    if (now - this.lastAttackTime < 1000 || this.isDead) {
+      return;
+    }
+    if (
+      this.collisionDetector.isCollisionWithPlayerHead(
+        this.getBounds(),
+        this.player.getBounds(),
+        this.isLookingRight
+      )
+    ) {
+      this.canAttack = true;
+      this.lastAttackTime = now;
+    } else {
+      this.canAttack = false;
     }
   }
 
@@ -190,6 +210,21 @@ export class Enemy extends MoveableObject {
       return "yellow"; // Gelb, wenn mehr als 20% Gesundheit übrig
     } else {
       return "red"; // Rot, wenn weniger als 20% Gesundheit übrig
+    }
+  }
+
+  attacking() {
+    if (!this.canAttack) {
+      return;
+    }
+    if (this.column < this.spriteState.maxColumns - 1) {
+      this.animation(this.sprite.attack);
+      if (this.column === this.spriteState.maxColumns - 3) {
+        this.player.setTakeDamage();
+      }
+    } else {
+      this.canAttack = false;
+      this.switchState();
     }
   }
 }

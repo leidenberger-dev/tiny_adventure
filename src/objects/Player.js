@@ -25,9 +25,14 @@ export class Player extends MoveableObject {
     this.climbSpeed = 10;
     this.isClimbing = false;
     this.canUseLadder = false;
+    this.isTakeDamage = false;
   }
 
   update() {
+    this.handleDead();
+    if (this.isDead) {
+      return;
+    }
     this.handleMovement();
     this.handleAttacks();
     this.handleAttackAnimation();
@@ -35,6 +40,7 @@ export class Player extends MoveableObject {
     this.handleJumpAndFall();
     this.handleClimbing();
     this.handleClimbingAnimation();
+    this.takeDamage();
   }
 
   jump() {
@@ -47,7 +53,7 @@ export class Player extends MoveableObject {
   }
 
   handleMovement() {
-    if (this.isAttacking || this.isShooting) {
+    if (this.isAttacking || this.isShooting || this.isTakeDamage) {
       return;
     }
     if (pressedKeys.up && this.canJump) {
@@ -71,6 +77,7 @@ export class Player extends MoveableObject {
   }
 
   handleAttacks() {
+    if (this.isTakeDamage) return;
     if (pressedKeys.attack && !this.isAttacking && !this.isShooting) {
       this.isAttacking = true;
     }
@@ -79,11 +86,13 @@ export class Player extends MoveableObject {
         return;
       }
       this.isShooting = true;
-      this.data.arrows--;
     }
   }
 
   handleAttackAnimation() {
+    if (this.isTakeDamage) {
+      return;
+    }
     if (this.isAttacking && this.column < this.spriteState.maxColumns - 1) {
       this.animation(this.sprite.attack);
     } else {
@@ -92,15 +101,21 @@ export class Player extends MoveableObject {
   }
 
   handleShootAnimation() {
+    if (this.isTakeDamage) {
+      return;
+    }
     if (this.isShooting && this.column < this.spriteState.maxColumns - 1) {
       this.animation(this.sprite.shooting);
+      if (this.column === this.spriteState.maxColumns - 1) {
+        this.data.arrows--;
+      }
     } else {
       this.isShooting = false;
     }
   }
 
   handleJumpAndFall() {
-    if (this.isClimbing) {
+    if (this.isClimbing || this.isTakeDamage) {
       return;
     }
 
@@ -125,7 +140,7 @@ export class Player extends MoveableObject {
   }
 
   handleIdleAndWalkingAnimations() {
-    if (this.isAttacking || this.isShooting) {
+    if (this.isAttacking || this.isShooting || this.isTakeDamage) {
       return;
     }
     if (pressedKeys.right || pressedKeys.left) {
@@ -142,7 +157,9 @@ export class Player extends MoveableObject {
       this.isClimbing = false;
       this.fallSpeed = 1;
     }
-    this.isFalling = true;
+    if (!this.isOnGround) {
+      this.isFalling = true;
+    }
 
     if (this.isClimbing && this.canUseLadder) {
       this.fallSpeed = 0;
@@ -164,4 +181,45 @@ export class Player extends MoveableObject {
       this.currentAnimation = "";
     }
   }
+
+  takeDamage() {
+    if (!this.isTakeDamage) {
+      return;
+    }
+    if (this.column < this.spriteState.maxColumns - 2) {
+      this.animation(this.sprite.hurt);
+    } else {
+      this.data.health -= 20;
+      this.isTakeDamage = false;
+    }
+  }
+
+  setTakeDamage() {
+    if (this.isDead) return;
+    this.isTakeDamage = true;
+    this.column = 0;
+  }
+
+  handleDead() {
+    if (this.position.y > 1550) {
+      this.isOnGround = true;
+      this.data.health = 0;
+    }
+    if (this.isFalling) return;
+    if (!this.data.health < 1 && !this.isDead) {
+      return;
+    } else {
+      this.isDead = true;
+    }
+    if (this.column < this.spriteState.maxColumns - 1) {
+      this.animation(this.sprite.dead);
+    } else {
+      this.column = this.spriteState.maxColumns - 1;
+      setTimeout(() => {
+        this.gameOver();
+      }, 1000);
+    }
+  }
+
+  gameOver() {}
 }

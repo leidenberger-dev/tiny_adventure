@@ -81,6 +81,7 @@ export class Gui {
     this.maxPoints = maxPoints.maxPoints;
     this.levelNumber = maxPoints.levelNumber;
     this.handleCollectPoint(this.maxPoints);
+    this.handlePlayerHealth();
   }
 
   draw() {
@@ -109,6 +110,16 @@ export class Gui {
     if (percentage >= 60) this.pointsbar.column = 3;
     if (percentage >= 80) this.pointsbar.column = 4;
     if (percentage === 100) this.pointsbar.column = 5;
+  }
+
+  handlePlayerHealth() {
+    const health = this.player.data.health;
+    if (health === 100) this.healthbar.column = 5;
+    if (health <= 80) this.healthbar.column = 4;
+    if (health <= 60) this.healthbar.column = 3;
+    if (health <= 40) this.healthbar.column = 2;
+    if (health <= 20) this.healthbar.column = 1;
+    if (health <= 0) this.healthbar.column = 0;
   }
 
   drawArrowsNumber() {

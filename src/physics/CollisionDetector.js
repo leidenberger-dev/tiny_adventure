@@ -195,4 +195,24 @@ export class CollisionDetector {
       playerBounds.left < tileBounds.right
     );
   }
+
+  isCollisionWithPlayerHead(enemyBounds, playerBounds, enemyFacingRight) {
+    const playerWidth = 200;
+
+    if (enemyFacingRight) {
+      return (
+        enemyBounds.right > playerBounds.left &&
+        enemyBounds.right < playerBounds.left + playerWidth &&
+        enemyBounds.top < playerBounds.bottom &&
+        enemyBounds.bottom > playerBounds.top
+      );
+    } else {
+      return (
+        enemyBounds.left < playerBounds.right &&
+        enemyBounds.left > playerBounds.right - playerWidth &&
+        enemyBounds.top < playerBounds.bottom &&
+        enemyBounds.bottom > playerBounds.top
+      );
+    }
+  }
 }

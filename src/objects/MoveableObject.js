@@ -4,6 +4,7 @@ export class MoveableObject extends GameObject {
   counter = 0;
   speed = 1;
   isJumping = false;
+  devModeVisual = true;
   constructor(sprite, player) {
     super(sprite, player);
     this.sprite = sprite;
