@@ -15,6 +15,7 @@ export class Game {
     this.renderer = new Renderer(this.level);
     this.isLoaded = false;
     this.gameState = "loading";
+    this.gameLoopId = null; // Spielschleifen-ID initialisieren
     this.loadLevel().then(() => {
       this.isLoaded = true;
       this.gameState = "running";
@@ -24,18 +25,22 @@ export class Game {
 
   start() {
     if (this.isLoaded) {
-      this.gameLoop();
+      if (!this.gameLoopId) {
+        this.gameLoopId = requestAnimationFrame(this.gameLoop);
+      }
     }
   }
 
   gameLoop = () => {
     if (this.gameState !== "running") {
-      return; // Verhindert die Ausführung der Spiellogik, wenn das Spiel nicht im Zustand 'running' ist
+      cancelAnimationFrame(this.gameLoopId);
+      this.gameLoopId = null;
+      return;
     }
     this.handlePause();
     this.renderer.draw();
     this.handleNextLevel();
-    requestAnimationFrame(this.gameLoop);
+    this.gameLoopId = requestAnimationFrame(this.gameLoop);
   };
 
   async loadLevel() {
