@@ -1,5 +1,5 @@
 export const boySprite = {
-  img: "../assets/img/boy.png",
+  img: "./assets/img/boy.png",
   frameWidth: 265.6,
   frameHeight: 250,
   maxColumns: 10,
@@ -53,7 +53,7 @@ export const boySprite = {
 };
 
 export const pepeSprite = {
-  img: "../assets/img/pepe.png",
+  img: "./assets/img/pepe.png",
   position: {
     x: 3180,
     y: 1015,
@@ -84,7 +84,7 @@ export const pepeSprite = {
 };
 
 export const doorSprite = {
-  img: "../assets/img/door.png",
+  img: "./assets/img/door.png",
   position: {
     x: 3310,
     y: 1200,
@@ -110,7 +110,7 @@ export const doorSprite = {
 };
 
 export const wolfSprite = {
-  img: "../assets/img/wolf.png",
+  img: "./assets/img/wolf.png",
   position: {
     x: 3310,
     y: 1200,
@@ -147,7 +147,7 @@ export const wolfSprite = {
 };
 
 export const bisonSprite = {
-  img: "../assets/img/bison.png",
+  img: "./assets/img/bison.png",
   position: {
     x: 3310,
     y: 1200,
@@ -184,7 +184,7 @@ export const bisonSprite = {
 };
 
 export const bearSprite = {
-  img: "../assets/img/bear.png",
+  img: "./assets/img/bear.png",
   position: {
     x: 3310,
     y: 1200,
@@ -221,7 +221,7 @@ export const bearSprite = {
 };
 
 export const arrowSprite = {
-  img: "../assets/img/arrow.png",
+  img: "./assets/img/arrow.png",
   position: {
     x: 3310,
     y: 1200,
@@ -243,7 +243,7 @@ export const arrowSprite = {
 };
 
 export const barsSprite = {
-  img: "../assets/img/bars.png",
+  img: "./assets/img/bars.png",
   position: {
     x: 0,
     y: 0,
@@ -260,7 +260,7 @@ export const barsSprite = {
 };
 
 export const buttonsSprite = {
-  img: "../assets/img/buttons.png",
+  img: "./assets/img/buttons.png",
   position: {
     x: 0,
     y: 0,
@@ -277,7 +277,7 @@ export const buttonsSprite = {
 };
 
 export const mobileButtonsSprite = {
-  img: "../assets/img/mobilebuttons.png",
+  img: "./assets/img/mobilebuttons.png",
   position: {
     x: 0,
     y: 0,
@@ -294,7 +294,7 @@ export const mobileButtonsSprite = {
 };
 
 export const mainButtonsSprite = {
-  img: "../assets/img/mainbuttons.png",
+  img: "./assets/img/mainbuttons.png",
   position: {
     x: 0,
     y: 0,
@@ -311,7 +311,7 @@ export const mainButtonsSprite = {
 };
 
 export const arrowsAmountSprite = {
-  img: "../assets/img/arrows-amount.png",
+  img: "./assets/img/arrows-amount.png",
   position: {
     x: 0,
     y: 0,
