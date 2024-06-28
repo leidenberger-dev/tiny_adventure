@@ -196,7 +196,7 @@ export class Player extends MoveableObject {
   }
 
   setTakeDamage() {
-    if (this.isDead) return;
+    if (this.isDead || this.isFalling) return;
     this.isTakeDamage = true;
     this.column = 0;
   }
