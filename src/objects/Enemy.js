@@ -137,6 +137,7 @@ export class Enemy extends MoveableObject {
   }
 
   detectCollisionWithPlayerHead() {
+    if (this.player.isFalling) return;
     const now = Date.now();
     if (now - this.lastAttackTime < 1000 || this.isDead) {
       return;

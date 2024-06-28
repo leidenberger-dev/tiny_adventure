@@ -26,6 +26,7 @@ export class Player extends MoveableObject {
     this.isClimbing = false;
     this.canUseLadder = false;
     this.isTakeDamage = false;
+    this.isDead = false;
   }
 
   update() {
@@ -115,7 +116,7 @@ export class Player extends MoveableObject {
   }
 
   handleJumpAndFall() {
-    if (this.isClimbing || this.isTakeDamage) {
+    if (this.isClimbing) {
       return;
     }
 
@@ -206,7 +207,7 @@ export class Player extends MoveableObject {
       this.data.health = 0;
     }
     if (this.isFalling) return;
-    if (!this.data.health < 1 && !this.isDead) {
+    if (!this.data.health < 1) {
       return;
     } else {
       this.isDead = true;
