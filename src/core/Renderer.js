@@ -2,14 +2,19 @@ import { canvas, ctx } from "../config/canvas.js";
 import { Camera } from "./Camera.js";
 import { Gui } from "./Gui.js";
 
+let startScreen = true;
 export class Renderer {
   constructor(level) {
+    this.startSceenImage = new Image();
+    this.startSceenImage.src = "./assets/img/startscreen.png";
     this.level = level;
     this.camera = new Camera(this.level.player, this.level);
     this.gui = new Gui();
+    this.checkStartScreen();
   }
 
   update() {
+    if (this.gui.startScreen) return;
     this.camera.update();
     this.level.player.update();
     this.gui.update(this.level);
@@ -27,6 +32,18 @@ export class Renderer {
   }
 
   drawScene() {
+    if (this.gui.startScreen) {
+      this.drawStartScreen();
+    } else {
+      this.drawLevel();
+    }
+  }
+
+  drawStartScreen() {
+    ctx.drawImage(this.startSceenImage, 0, 0, canvas.width, canvas.height);
+  }
+
+  drawLevel() {
     ctx.save();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.translate(-this.camera.x, -this.camera.y);
@@ -49,5 +66,11 @@ export class Renderer {
     this.level.showStep2 = false;
     this.level.showStep3 = false;
     this.level.showStep4 = false;
+  }
+
+  checkStartScreen() {
+    if (this.level.levelNumber === 1) {
+      this.gui.startScreen = true;
+    }
   }
 }

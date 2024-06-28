@@ -11,11 +11,13 @@ export class Game {
     this.checkDevMode();
     this.input = handleInput;
     this.input();
-    this.level = new Level2();
+    this.level = new Level1();
     this.renderer = new Renderer(this.level);
     this.isLoaded = false;
+    this.gameState = "loading";
     this.loadLevel().then(() => {
       this.isLoaded = true;
+      this.gameState = "running";
       this.start();
     });
   }
@@ -27,14 +29,20 @@ export class Game {
   }
 
   gameLoop = () => {
+    if (this.gameState !== "running") {
+      return; // Verhindert die Ausführung der Spiellogik, wenn das Spiel nicht im Zustand 'running' ist
+    }
     this.handlePause();
     this.renderer.draw();
+    this.handleNextLevel();
     requestAnimationFrame(this.gameLoop);
   };
 
   async loadLevel() {
+    this.gameState = "loading";
     const level = this.level;
     await level.mapData.loadJson();
+    this.gameState = "running";
     return level;
   }
 
@@ -54,6 +62,18 @@ export class Game {
     if (pressedKeys.pause) {
       this.level.pause = !this.level.pause;
       pressedKeys.pause = false;
+    }
+  }
+
+  async handleNextLevel() {
+    if (this.level.door.doorOpen) {
+      this.level = new Level2();
+      this.renderer = new Renderer(this.level);
+      this.isLoaded = false;
+      await this.loadLevel().then(() => {
+        this.isLoaded = true;
+        this.start();
+      });
     }
   }
 }

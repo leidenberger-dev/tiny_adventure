@@ -5,12 +5,15 @@ import {
   barsSprite,
   boySprite,
   buttonsSprite,
+  mainButtonsSprite,
   mobileButtonsSprite,
 } from "../objects/sprites.js";
-import { ctx } from "../config/canvas.js";
+import { canvas, ctx } from "../config/canvas.js";
 
 export class Gui {
   constructor() {
+    this.initEvents();
+    this.startScreen = false;
     this.player = new Player(boySprite);
     this.healthbar = new GameObject(barsSprite);
     this.healthbar.column = 5;
@@ -75,6 +78,12 @@ export class Gui {
       x: 600,
       y: 0,
     };
+
+    this.startButton = new GameObject(mainButtonsSprite);
+    this.startButton.position = {
+      x: 550,
+      y: 580,
+    };
   }
 
   update(maxPoints) {
@@ -96,6 +105,10 @@ export class Gui {
     this.soundButton.draw();
     this.pauseButton.draw();
     this.menuButton.draw();
+    if (this.startScreen) {
+      this.startButton.draw();
+      return;
+    }
     this.mobileLeft.draw();
     this.mobileRight.draw();
     this.mobileBButton.draw();
@@ -138,5 +151,54 @@ export class Gui {
     ctx.strokeStyle = "black";
     ctx.lineWidth = 3;
     ctx.strokeText(this.player.data.points, 460, 67);
+  }
+
+  initEvents() {
+    window.addEventListener("click", (e) => this.handleMouseClick(e));
+    window.addEventListener("mousemove", (e) => this.handleMouseMove(e));
+  }
+
+  handleMouseClick(e) {
+    const { x, y } = this.getMousePos(e);
+    if (this.isMouseOverButton(x, y, this.startButton)) {
+      this.onStartButtonClick();
+    }
+  }
+
+  handleMouseMove(e) {
+    const { x, y } = this.getMousePos(e);
+    const isOverStartButton = this.isMouseOverButton(x, y, this.startButton);
+
+    if (isOverStartButton && this.hoveredButton !== this.startButton) {
+      this.hoveredButton = this.startButton;
+      canvas.style.cursor = "pointer";
+    } else if (!isOverStartButton && this.hoveredButton === this.startButton) {
+      this.hoveredButton = null;
+      canvas.style.cursor = "default";
+    }
+  }
+
+  getMousePos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY,
+    };
+  }
+
+  isMouseOverButton(mouseX, mouseY, button) {
+    return (
+      mouseX >= button.position.x &&
+      mouseX <= button.position.x + button.frameWidth &&
+      mouseY >= button.position.y &&
+      mouseY <= button.position.y + button.frameHeight
+    );
+  }
+
+  onStartButtonClick() {
+    console.log("click!");
+    this.startScreen = false;
   }
 }
