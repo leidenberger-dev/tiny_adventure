@@ -5,7 +5,6 @@ import { pepeSprite, doorSprite } from "../../objects/sprites.js";
 import { Pepe } from "../../objects/Pepe.js";
 import { Gravity } from "../../physics/Gravity.js";
 import { ctx } from "../../config/canvas.js";
-import { convertToBlackAndWhite } from "../../utils/imageUtils.js";
 
 const levelSettings = {
   level: 1,
@@ -85,13 +84,15 @@ export class Level1 extends Level {
     this.drawClouds();
 
     if (this.isHtmlCollected) {
+      if (!this.isCssCollected) {
+        ctx.filter = "grayscale(100%)";
+      }
       ctx.drawImage(this.map, 0, this.player.jumpHeight);
       this.door.draw();
       this.pepe.drawMirrored();
-    }
-
-    if (!this.isCssCollected) {
-      convertToBlackAndWhite();
+      if (!this.isCssCollected) {
+        ctx.filter = "none";
+      }
     }
 
     this.mapData.drawItemsLayer(this.player.jumpHeight);
