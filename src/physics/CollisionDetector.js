@@ -166,11 +166,12 @@ export class CollisionDetector {
   }
 
   isCollisionLadder(playerBounds, tileBounds) {
+    const expand = 40;
     return (
       playerBounds.bottom > tileBounds.top &&
-      playerBounds.top < tileBounds.bottom &&
-      playerBounds.right < tileBounds.right + 5 &&
-      playerBounds.left > tileBounds.left - 5
+      playerBounds.top < tileBounds.bottom + expand &&
+      playerBounds.right < tileBounds.right + expand &&
+      playerBounds.left > tileBounds.left - expand
     );
   }
 
