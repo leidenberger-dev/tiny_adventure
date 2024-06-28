@@ -218,6 +218,7 @@ export class Gui {
     } else if (!isOverPauseButton && this.hoveredButton === this.pauseButton) {
       this.pauseBtnHover = false;
       this.resetHoveredButton();
+      this.pauseButton.column = this.isPause ? 2 : 0;
     }
   }
 
