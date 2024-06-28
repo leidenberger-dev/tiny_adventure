@@ -138,7 +138,7 @@ export class CollisionDetector {
           tileHeight,
           jumpHeight
         );
-        if (this.isCollision(playerBounds, tileBounds)) {
+        if (this.isCollisionLadder(playerBounds, tileBounds)) {
           if (ladder === 91) {
             this.ladderCollision = true;
           }
@@ -162,6 +162,15 @@ export class CollisionDetector {
       playerBounds.top < tileBounds.bottom &&
       playerBounds.right < tileBounds.right &&
       playerBounds.left > tileBounds.left
+    );
+  }
+
+  isCollisionLadder(playerBounds, tileBounds) {
+    return (
+      playerBounds.bottom > tileBounds.top &&
+      playerBounds.top < tileBounds.bottom &&
+      playerBounds.right < tileBounds.right + 5 &&
+      playerBounds.left > tileBounds.left - 5
     );
   }
 
