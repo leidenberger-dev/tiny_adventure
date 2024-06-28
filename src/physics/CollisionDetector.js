@@ -165,12 +165,13 @@ export class CollisionDetector {
     );
   }
 
-  isCollisionOutside(playerBounds, tileBounds) {
+  isCollisionPepe(playerBounds, tileBounds) {
+    const height = 60;
     return (
-      playerBounds.bottom < tileBounds.top &&
-      playerBounds.top > tileBounds.bottom &&
-      playerBounds.right > tileBounds.right &&
-      playerBounds.left < tileBounds.left
+      playerBounds.bottom > tileBounds.top &&
+      playerBounds.top < tileBounds.bottom - height &&
+      playerBounds.right > tileBounds.left &&
+      playerBounds.left < tileBounds.right
     );
   }
 

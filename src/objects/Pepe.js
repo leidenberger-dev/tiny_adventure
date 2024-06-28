@@ -60,12 +60,14 @@ export class Pepe extends MoveableObject {
 
   detectCollision() {
     if (
-      this.collisionDetector.isCollision(
+      this.collisionDetector.isCollisionPepe(
         this.player.getBounds(),
         this.getBounds()
       )
     ) {
       this.collision = true;
+    } else {
+      this.collision = false;
     }
   }
 }
