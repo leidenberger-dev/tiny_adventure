@@ -114,11 +114,14 @@ export class Gui {
     }
     this.pauseButton.draw();
     this.menuButton.draw();
-    this.mobileLeft.draw();
-    this.mobileRight.draw();
-    this.mobileBButton.draw();
-    this.mobileYButton.draw();
-    this.mobileAButton.draw();
+    if (window.matchMedia("(hover: none) and (pointer: coarse)").matches) {
+      // Zeichnen Sie die mobilen Buttons nur, wenn das Gerät ein Touchscreen ist
+      this.mobileLeft.draw();
+      this.mobileRight.draw();
+      this.mobileBButton.draw();
+      this.mobileYButton.draw();
+      this.mobileAButton.draw();
+    }
   }
 
   handleCollectPoint(maxPoints) {
