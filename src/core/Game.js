@@ -59,16 +59,21 @@ export class Game {
   }
 
   handlePause() {
+    if (this.renderer.gui.startScreen) return;
+    this.level.pause = this.renderer.gui.isPause;
     if (pressedKeys.pause) {
       this.level.pause = !this.level.pause;
+      this.renderer.gui.isPause = this.level.pause;
       pressedKeys.pause = false;
     }
   }
 
   async handleNextLevel() {
+    const guiSettings = this.renderer.gui;
     if (this.level.door.doorOpen) {
       this.level = new Level2();
       this.renderer = new Renderer(this.level);
+      this.renderer.gui = guiSettings;
       this.isLoaded = false;
       await this.loadLevel().then(() => {
         this.isLoaded = true;

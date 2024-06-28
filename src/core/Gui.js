@@ -11,8 +11,9 @@ import {
 import { canvas, ctx } from "../config/canvas.js";
 
 export class Gui {
-  constructor() {
+  constructor(isPause) {
     this.initEvents();
+    this.startButtonActive = false;
     this.startScreen = false;
     this.player = new Player(boySprite);
     this.healthbar = new GameObject(barsSprite);
@@ -93,7 +94,11 @@ export class Gui {
     this.handlePlayerHealth();
   }
 
-  draw() {
+  draw(isPause) {
+    this.isPause = isPause;
+    if (!this.isPauseBtnHover) {
+      this.pauseButton.column = this.isPause ? 2 : 0;
+    }
     if (this.levelNumber > 1) {
       this.healthbar.draw();
       this.pointsbar.draw();
@@ -103,12 +108,12 @@ export class Gui {
     }
 
     this.soundButton.draw();
-    this.pauseButton.draw();
-    this.menuButton.draw();
     if (this.startScreen) {
       this.startButton.draw();
       return;
     }
+    this.pauseButton.draw();
+    this.menuButton.draw();
     this.mobileLeft.draw();
     this.mobileRight.draw();
     this.mobileBButton.draw();
@@ -161,21 +166,64 @@ export class Gui {
   handleMouseClick(e) {
     const { x, y } = this.getMousePos(e);
     if (this.isMouseOverButton(x, y, this.startButton)) {
-      this.onStartButtonClick();
+      if (this.startButtonActive) {
+        this.onStartButtonClick();
+      }
+    }
+    if (this.isMouseOverButton(x, y, this.soundButton)) {
+      this.onSoundButtonClick();
+    }
+    if (this.isMouseOverButton(x, y, this.pauseButton)) {
+      this.onPauseButtonClick();
     }
   }
 
   handleMouseMove(e) {
     const { x, y } = this.getMousePos(e);
     const isOverStartButton = this.isMouseOverButton(x, y, this.startButton);
+    const isOverSoundButton = this.isMouseOverButton(x, y, this.soundButton);
+    const isOverPauseButton = this.isMouseOverButton(x, y, this.pauseButton);
 
-    if (isOverStartButton && this.hoveredButton !== this.startButton) {
+    // Logic for the Start Button
+    if (
+      this.startButtonActive &&
+      isOverStartButton &&
+      this.hoveredButton !== this.startButton
+    ) {
+      this.activeStartColor = this.soundButton.column;
       this.hoveredButton = this.startButton;
       canvas.style.cursor = "pointer";
+      this.startButton.column = 1;
     } else if (!isOverStartButton && this.hoveredButton === this.startButton) {
-      this.hoveredButton = null;
-      canvas.style.cursor = "default";
+      this.resetHoveredButton();
+      this.startButton.column = this.activeStartColor;
     }
+
+    // Logic for the Sound Button
+    if (isOverSoundButton && this.hoveredButton !== this.soundButton) {
+      this.activeSoundColor = this.soundButton.column;
+      this.hoveredButton = this.soundButton;
+      canvas.style.cursor = "pointer";
+      this.soundButton.column = 1;
+    } else if (!isOverSoundButton && this.hoveredButton === this.soundButton) {
+      this.resetHoveredButton();
+      this.soundButton.column = this.activeSoundColor;
+    }
+    if (this.startScreen) return;
+    if (isOverPauseButton && this.hoveredButton !== this.pauseButton) {
+      this.hoveredButton = this.pauseButton;
+      canvas.style.cursor = "pointer";
+      this.isPauseBtnHover = true;
+      this.pauseButton.column = 1;
+    } else if (!isOverPauseButton && this.hoveredButton === this.pauseButton) {
+      this.pauseBtnHover = false;
+      this.resetHoveredButton();
+    }
+  }
+
+  resetHoveredButton() {
+    this.hoveredButton = null;
+    canvas.style.cursor = "default";
   }
 
   getMousePos(e) {
@@ -198,7 +246,20 @@ export class Gui {
   }
 
   onStartButtonClick() {
-    console.log("click!");
     this.startScreen = false;
+    this.startButtonActive = false;
+    this.hoveredButton = null;
+    canvas.style.cursor = "default";
+  }
+
+  onSoundButtonClick() {
+    this.soundButton.column = this.activeSoundColor === 2 ? 0 : 2;
+    this.activeSoundColor = this.soundButton.column;
+  }
+
+  onPauseButtonClick() {
+    this.pauseButton.column = this.isPause ? 2 : 0;
+    this.isPauseBtnHover = false;
+    this.isPause = !this.isPause;
   }
 }

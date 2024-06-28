@@ -9,7 +9,7 @@ export class Renderer {
     this.startSceenImage.src = "./assets/img/startscreen.png";
     this.level = level;
     this.camera = new Camera(this.level.player, this.level);
-    this.gui = new Gui();
+    this.gui = new Gui(this.level.pause);
     this.checkStartScreen();
   }
 
@@ -23,12 +23,13 @@ export class Renderer {
   draw() {
     if (this.level.pause) {
       this.handlePauseState();
+      this.gui.draw(this.level.pause);
       return;
     }
 
     this.update();
     this.drawScene();
-    this.gui.draw();
+    this.gui.draw(this.level.pause);
   }
 
   drawScene() {
@@ -71,6 +72,9 @@ export class Renderer {
   checkStartScreen() {
     if (this.level.levelNumber === 1) {
       this.gui.startScreen = true;
+      this.gui.startButtonActive = true;
+    } else {
+      this.gui.startScreen = false;
     }
   }
 }
