@@ -18,7 +18,7 @@ export const boySprite = {
     row: 0,
     maxColumns: 4,
     sound: "./assets/sounds/player/footstaps.mp3",
-    volume: 0.7,
+    volume: 1,
     speed: 3,
   },
   jumping: {
