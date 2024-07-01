@@ -83,6 +83,9 @@ export class MapData {
         case 185:
           image = this.point;
           break;
+        case 102:
+          image = this.point;
+          break;
         case 209:
           image = this.arrows;
           break;

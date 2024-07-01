@@ -1,5 +1,5 @@
 import { GameObject } from "./GameObject.js";
-
+import { playSound } from "../utils/playSound.js";
 export class MoveableObject extends GameObject {
   counter = 0;
   speed = 1;
@@ -7,8 +7,14 @@ export class MoveableObject extends GameObject {
   devModeVisual = true;
   constructor(sprite, player) {
     super(sprite, player);
+    this.spriteState = sprite.idle;
     this.sprite = sprite;
     this.animationSpeed = this.sprite.animationSpeed;
+    this.currentSound = {
+      currentTime: 0,
+    };
+    this.playSound = playSound;
+    this.soundsPlaying = {};
   }
   moveUp() {
     this.position.y -= this.speed;
@@ -49,6 +55,13 @@ export class MoveableObject extends GameObject {
     } else if (this.counter >= this.animationSpeed) {
       this.column = (this.column + 1) % spriteState.maxColumns;
       this.counter = 0;
+    }
+  }
+
+  stopSound() {
+    if (this.currentSound.currentTime > 0) {
+      this.currentSound.pause();
+      this.currentSound.currentTime = 0;
     }
   }
 }

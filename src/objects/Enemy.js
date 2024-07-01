@@ -157,7 +157,9 @@ export class Enemy extends MoveableObject {
   }
 
   takeDamage(shoot) {
+    if (this.isDead) return;
     if (shoot) {
+      this.playSound("./assets/sounds/enemy/takeDamage.mp3", 0.4, 1);
       this.health -= this.damageAmount;
       this.hasTakenDamage = true;
       if (this.health < 0) {
@@ -166,6 +168,7 @@ export class Enemy extends MoveableObject {
       }
     }
     if (this.collision && this.player.isAttacking && !this.hasTakenDamage) {
+      this.playSound("./assets/sounds/enemy/takeDamage.mp3", 0.4, 1);
       this.health -= this.damageAmount;
       this.hasTakenDamage = true;
       if (this.health < 0) {

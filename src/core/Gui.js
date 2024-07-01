@@ -11,11 +11,14 @@ import {
 import { canvas, ctx } from "../config/canvas.js";
 
 export class Gui {
-  constructor(isPause) {
+  constructor() {
     this.initEvents();
     this.startButtonActive = false;
     this.startScreen = false;
     this.player = new Player(boySprite);
+    this.tryAgainClicked = false;
+    this.gameOverImage = new Image();
+    this.gameOverImage.src = "./assets/img/youlost.png";
     this.healthbar = new GameObject(barsSprite);
     this.healthbar.column = 5;
     this.pointsbar = new GameObject(barsSprite);
@@ -82,7 +85,14 @@ export class Gui {
 
     this.startButton = new GameObject(mainButtonsSprite);
     this.startButton.position = {
-      x: 550,
+      x: 500,
+      y: 580,
+    };
+
+    this.tryAgainButton = new GameObject(mainButtonsSprite);
+    this.tryAgainButton.row = 1;
+    this.tryAgainButton.position = {
+      x: 500,
       y: 580,
     };
   }
@@ -114,6 +124,7 @@ export class Gui {
     }
     this.pauseButton.draw();
     this.menuButton.draw();
+    this.drawGameOver();
     if (window.matchMedia("(hover: none) and (pointer: coarse)").matches) {
       // Zeichnen Sie die mobilen Buttons nur, wenn das Gerät ein Touchscreen ist
       this.mobileLeft.draw();
@@ -161,6 +172,13 @@ export class Gui {
     ctx.strokeText(this.player.data.points, 460, 67);
   }
 
+  drawGameOver() {
+    if (this.player.data.health < 1) {
+      ctx.drawImage(this.gameOverImage, 0, 0, canvas.width, canvas.height);
+      this.tryAgainButton.draw();
+    }
+  }
+
   initEvents() {
     window.addEventListener("click", (e) => this.handleMouseClick(e));
     window.addEventListener("mousemove", (e) => this.handleMouseMove(e));
@@ -179,6 +197,12 @@ export class Gui {
     if (this.isMouseOverButton(x, y, this.pauseButton)) {
       this.onPauseButtonClick();
     }
+    if (
+      this.isMouseOverButton(x, y, this.tryAgainButton) &&
+      this.player.data.health < 1
+    ) {
+      this.onTryAgainButtonClick();
+    }
   }
 
   handleMouseMove(e) {
@@ -186,6 +210,11 @@ export class Gui {
     const isOverStartButton = this.isMouseOverButton(x, y, this.startButton);
     const isOverSoundButton = this.isMouseOverButton(x, y, this.soundButton);
     const isOverPauseButton = this.isMouseOverButton(x, y, this.pauseButton);
+    const isOverTryAgainButton = this.isMouseOverButton(
+      x,
+      y,
+      this.tryAgainButton
+    );
 
     // Logic for the Start Button
     if (
@@ -213,6 +242,8 @@ export class Gui {
       this.soundButton.column = this.activeSoundColor;
     }
     if (this.startScreen) return;
+
+    // Pause Button Logic
     if (isOverPauseButton && this.hoveredButton !== this.pauseButton) {
       this.hoveredButton = this.pauseButton;
       canvas.style.cursor = "pointer";
@@ -222,6 +253,24 @@ export class Gui {
       this.pauseBtnHover = false;
       this.resetHoveredButton();
       this.pauseButton.column = this.isPause ? 2 : 0;
+    }
+
+    // Menu Button Logic
+
+    // Mobile Buttons Logic
+
+    // Try Again Button Logic
+    if (isOverTryAgainButton && this.player.data.health < 1) {
+      this.hoveredButton = this.tryAgainButton;
+      canvas.style.cursor = "pointer";
+      this.isTryAgainBtnHover = true;
+      this.tryAgainButton.column = 1;
+    } else if (
+      !isOverTryAgainButton &&
+      this.hoveredButton === this.tryAgainButton
+    ) {
+      this.resetHoveredButton();
+      this.tryAgainButton.column = 0;
     }
   }
 
@@ -265,5 +314,16 @@ export class Gui {
     this.pauseButton.column = this.isPause ? 2 : 0;
     this.isPauseBtnHover = false;
     this.isPause = !this.isPause;
+  }
+
+  onTryAgainButtonClick() {
+    this.tryAgainClicked = true;
+  }
+
+  getTryAgainStatus() {
+    const wasClicked = this.tryAgainClicked;
+    // Setzen Sie tryAgainClicked zurück, nachdem der Status abgefragt wurde
+    this.tryAgainClicked = false;
+    return wasClicked;
   }
 }

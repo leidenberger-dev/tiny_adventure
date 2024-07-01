@@ -13,10 +13,8 @@ const levelSettings = {
   foreground: "./assets/img/level1/mapLevel1Foreground.png",
   background: "./assets/img/bg.png",
   clouds: "./assets/img/clouds.png",
-  startPoint: {
-    x: 2500,
-    y: 1231,
-  },
+  startPointX: 2500,
+  startPointY: 1231,
 };
 
 export class Level1 extends Level {

@@ -1,3 +1,5 @@
+import { playSound } from "../utils/playSound.js";
+
 export class CollisionDetector {
   htmlCollected = false;
   cssCollected = false;
@@ -5,6 +7,8 @@ export class CollisionDetector {
   constructor(mapData, player) {
     this.mapData = mapData;
     this.player = player;
+    this.playSound = playSound;
+    this.originalMapData = mapData;
   }
 
   detectCollisionLevel1() {
@@ -24,6 +28,15 @@ export class CollisionDetector {
     this.detectGroundCollisions(playerBounds, collisionData);
     this.detectItemCollisions(playerBounds, itemsData);
     this.detectLadderCollision(playerBounds, ladderData);
+  }
+
+  detectCollisionLevel3() {
+    this.player.isOnGround = false;
+    const playerBounds = this.getPlayerBounds();
+    const { collisionData, itemsData } = this.mapData;
+
+    this.detectGroundCollisions(playerBounds, collisionData);
+    this.detectItemCollisions(playerBounds, itemsData);
   }
 
   getPlayerBounds() {
@@ -99,6 +112,7 @@ export class CollisionDetector {
           jumpHeight
         );
         if (this.isCollisionCenter(playerBounds, tileBounds)) {
+          this.playSound("./assets/sounds/item.mp3", 0.1, 1);
           if (item === 147) {
             this.javascriptCollected = true;
           }
@@ -111,13 +125,18 @@ export class CollisionDetector {
           if (item === 185) {
             this.player.data.points++;
           }
+          if (item === 102) {
+            this.player.data.points++;
+          }
           if (item === 209) {
             this.player.data.arrows += 3;
           }
           if (item === 184) {
+            if (this.player.data.health < 100) {
+              this.playSound("./assets/sounds/health.mp3", 0.1, 1);
+            }
             this.player.data.health = 100;
           }
-
           this.mapData.itemsData[i] = 0;
         }
       }

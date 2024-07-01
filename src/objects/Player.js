@@ -27,6 +27,8 @@ export class Player extends MoveableObject {
     this.canUseLadder = false;
     this.isTakeDamage = false;
     this.isDead = false;
+    this.data.health = 100;
+    this.data.points = 0;
   }
 
   update() {
@@ -42,6 +44,7 @@ export class Player extends MoveableObject {
     this.handleClimbing();
     this.handleClimbingAnimation();
     this.takeDamage();
+    this.handleSounds();
   }
 
   jump() {
@@ -91,7 +94,7 @@ export class Player extends MoveableObject {
   }
 
   handleAttackAnimation() {
-    if (this.isTakeDamage) {
+    if (this.isTakeDamage || this.isJumping) {
       return;
     }
     if (this.isAttacking && this.column < this.spriteState.maxColumns - 1) {
@@ -146,7 +149,9 @@ export class Player extends MoveableObject {
     }
     if (pressedKeys.right || pressedKeys.left) {
       this.animation(this.sprite.walking);
+      this.isMoving = true;
     } else {
+      this.isMoving = false;
       this.animation(this.sprite.idle);
     }
   }
@@ -202,7 +207,7 @@ export class Player extends MoveableObject {
   }
 
   handleDead() {
-    if (this.position.y > 1550) {
+    if (this.position.y > 1550 && !this.restart) {
       this.isOnGround = true;
       this.data.health = 0;
     }
@@ -216,11 +221,41 @@ export class Player extends MoveableObject {
       this.animation(this.sprite.dead);
     } else {
       this.column = this.spriteState.maxColumns - 1;
-      setTimeout(() => {
-        this.gameOver();
-      }, 1000);
     }
   }
 
-  gameOver() {}
+  handleSounds() {
+    const playSoundIfNotAlreadyPlaying = (soundName, soundDetails) => {
+      if (!this.soundsPlaying[soundName]) {
+        this.playSound(
+          soundDetails.sound,
+          soundDetails.volume,
+          soundDetails.speed
+        );
+        this.soundsPlaying[soundName] = true;
+        this.currentSound.onended = () => {
+          this.soundsPlaying[soundName] = false;
+        };
+      }
+    };
+
+    if (this.isMoving && this.isOnGround && !this.isShooting) {
+      playSoundIfNotAlreadyPlaying("walking", this.sprite.walking);
+    }
+    if (this.isJumping && !this.canJump) {
+      playSoundIfNotAlreadyPlaying("jumping", this.sprite.jumping);
+    }
+    if (this.isTakeDamage) {
+      playSoundIfNotAlreadyPlaying("hurt", this.sprite.hurt);
+    }
+    if (this.isShooting && this.isOnGround) {
+      playSoundIfNotAlreadyPlaying("shooting", this.sprite.shooting);
+    }
+    if (this.data.health < 1) {
+      playSoundIfNotAlreadyPlaying("dead", this.sprite.dead);
+    }
+    if (this.isAttacking && this.isOnGround && !this.isTakeDamage) {
+      playSoundIfNotAlreadyPlaying("attack", this.sprite.attack);
+    }
+  }
 }

@@ -12,6 +12,8 @@ export class Level {
   cloudX = 1500;
   isJavascriptCollected = true;
   constructor(levelSettings) {
+    this.startPointX = levelSettings.startPointX;
+    this.startPointY = levelSettings.startPointY;
     this.player = new Player(boySprite);
     this.levelNumber = levelSettings.level;
     this.map = new Image();
@@ -23,7 +25,8 @@ export class Level {
     this.background.src = levelSettings.background;
     this.clouds = new Image();
     this.clouds.src = levelSettings.clouds;
-    this.player.position = levelSettings.startPoint;
+    this.player.position.x = levelSettings.startPointX;
+    this.player.position.y = levelSettings.startPointY;
     this.mapJson = levelSettings.mapJson;
     this.mapData = new MapData(levelSettings);
     this.arrow = new Arrow(arrowSprite, this.player);

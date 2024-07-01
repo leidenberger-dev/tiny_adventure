@@ -5,10 +5,10 @@ export const boySprite = {
   maxColumns: 10,
   offsetX: 25,
   offsetY: 35,
-  offsetWidth: 140,
+  offsetWidth: 120,
   offsetHeight: 58,
   animationSpeed: 7,
-  mirrorPoint: 1.5,
+  mirrorPoint: 1.38,
 
   idle: {
     row: 1,
@@ -17,10 +17,16 @@ export const boySprite = {
   walking: {
     row: 0,
     maxColumns: 4,
+    sound: "./assets/sounds/player/footstaps.mp3",
+    volume: 0.7,
+    speed: 3,
   },
   jumping: {
     row: 2,
     maxColumns: 6,
+    sound: "./assets/sounds/player/jump.mp3",
+    volume: 0.7,
+    speed: 1,
   },
   falling: {
     row: 5,
@@ -30,6 +36,9 @@ export const boySprite = {
   attack: {
     row: 4,
     maxColumns: 6,
+    sound: "./assets/sounds/player/attack.mp3",
+    volume: 0.7,
+    speed: 1.3,
   },
   climbing: {
     row: 6,
@@ -39,16 +48,25 @@ export const boySprite = {
   shooting: {
     row: 8,
     maxColumns: 9,
+    sound: "./assets/sounds/player/arrow.mp3",
+    volume: 0.7,
+    speed: 1,
   },
 
   hurt: {
     row: 9,
     maxColumns: 5,
+    sound: "./assets/sounds/player/hurt.wav",
+    volume: 0.7,
+    speed: 1,
   },
 
   dead: {
     row: 7,
     maxColumns: 7,
+    sound: "./assets/sounds/player/dead.mp3",
+    volume: 0.7,
+    speed: 1,
   },
 };
 
@@ -75,6 +93,9 @@ export const pepeSprite = {
   sleep: {
     row: 2,
     maxColumns: 10,
+    sound: "./assets/sounds/pepe/snoring.mp3",
+    volume: 0.7,
+    speed: 2,
   },
 
   walking: {
@@ -325,4 +346,41 @@ export const arrowsAmountSprite = {
   offsetHeight: 85,
   animationSpeed: 5,
   mirrorPoint: 1.2,
+};
+
+export const bossSprite = {
+  img: "./assets/img/level3/boss.png",
+  position: {
+    x: 1655,
+    y: 600,
+  },
+  frameWidth: 261.25 * 1.5,
+  frameHeight: 304.25 * 1.5,
+  maxColumns: 8,
+  offsetX: 20,
+  offsetY: 70,
+  offsetWidth: 50,
+  offsetHeight: 85,
+  animationSpeed: 10,
+  mirrorPoint: 1,
+
+  idle: {
+    row: 0,
+    maxColumns: 8,
+  },
+
+  walk: {
+    row: 1,
+    maxColumns: 4,
+  },
+
+  attack: {
+    row: 2,
+    maxColumns: 8,
+  },
+
+  dead: {
+    row: 4,
+    maxColumns: 3,
+  },
 };

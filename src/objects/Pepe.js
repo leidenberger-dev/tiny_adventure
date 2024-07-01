@@ -16,6 +16,7 @@ export class Pepe extends MoveableObject {
     this.detectCollision();
     this.checkJavascriptCollection();
     this.movementOpenDoor();
+    this.handleSounds();
   }
 
   checkJavascriptCollection() {
@@ -27,6 +28,7 @@ export class Pepe extends MoveableObject {
   }
 
   awake() {
+    this.stopSound();
     if (!this.doorUnlocked) {
       this.activeAnimation = () => {
         this.animation(this.sprite.idle);
@@ -68,6 +70,26 @@ export class Pepe extends MoveableObject {
       this.collision = true;
     } else {
       this.collision = false;
+    }
+  }
+
+  handleSounds() {
+    const playSoundIfNotAlreadyPlaying = (soundName, soundDetails) => {
+      if (!this.soundsPlaying[soundName]) {
+        this.playSound(
+          soundDetails.sound,
+          soundDetails.volume,
+          soundDetails.speed
+        );
+        this.soundsPlaying[soundName] = true;
+        this.currentSound.onended = () => {
+          this.soundsPlaying[soundName] = false;
+        };
+      }
+    };
+
+    if (this.row === 2 && this.level.isHtmlCollected) {
+      playSoundIfNotAlreadyPlaying("sleep", this.sprite.sleep);
     }
   }
 }
