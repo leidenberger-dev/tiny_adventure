@@ -1,6 +1,7 @@
 import { MoveableObject } from "./MoveableObject.js";
 import { pressedKeys } from "../config/keys.js";
 import { mapWidth } from "../levels/Level.js";
+import { Game } from "../core/Game.js";
 
 const dataSymbol = Symbol("data");
 export class Player extends MoveableObject {
@@ -225,17 +226,25 @@ export class Player extends MoveableObject {
   }
 
   handleSounds() {
+    if (!this.soundPlayers) {
+      this.soundPlayers = {};
+    }
+
     const playSoundIfNotAlreadyPlaying = (soundName, soundDetails) => {
       if (!this.soundsPlaying[soundName]) {
-        this.playSound(
+        const sound = this.playSound(
           soundDetails.sound,
           soundDetails.volume,
           soundDetails.speed
         );
         this.soundsPlaying[soundName] = true;
-        this.currentSound.onended = () => {
+        this.soundPlayers[soundName] = sound;
+        sound.onended = () => {
           this.soundsPlaying[soundName] = false;
         };
+      }
+      if (Game.isMuted) {
+        this.soundPlayers[soundName].muted = true;
       }
     };
 
@@ -256,6 +265,12 @@ export class Player extends MoveableObject {
     }
     if (this.isAttacking && this.isOnGround && !this.isTakeDamage) {
       playSoundIfNotAlreadyPlaying("attack", this.sprite.attack);
+    }
+
+    if (Game.isMuted) {
+      Object.values(this.soundPlayers).forEach((sound) => {
+        sound.muted = true;
+      });
     }
   }
 }

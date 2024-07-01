@@ -1,4 +1,5 @@
 import { MoveableObject } from "./MoveableObject.js";
+import { Game } from "../core/Game.js";
 
 export class Enemy extends MoveableObject {
   constructor(sprite, player, position) {
@@ -28,6 +29,7 @@ export class Enemy extends MoveableObject {
   }
 
   update() {
+    this.updateVolume();
     this.switchState();
     this.detectCollision();
     this.detectCollisionWithPlayerHead();
@@ -159,7 +161,11 @@ export class Enemy extends MoveableObject {
   takeDamage(shoot) {
     if (this.isDead) return;
     if (shoot) {
-      this.playSound("./assets/sounds/enemy/takeDamage.mp3", 0.4, 1);
+      this.takeShootDamageSound = this.playSound(
+        "./assets/sounds/enemy/takeDamage.mp3",
+        0.4,
+        1
+      );
       this.health -= this.damageAmount;
       this.hasTakenDamage = true;
       if (this.health < 0) {
@@ -168,7 +174,11 @@ export class Enemy extends MoveableObject {
       }
     }
     if (this.collision && this.player.isAttacking && !this.hasTakenDamage) {
-      this.playSound("./assets/sounds/enemy/takeDamage.mp3", 0.4, 1);
+      this.takeAttackDamage = this.playSound(
+        "./assets/sounds/enemy/takeDamage.mp3",
+        0.4,
+        1
+      );
       this.health -= this.damageAmount;
       this.hasTakenDamage = true;
       if (this.health < 0) {
@@ -229,6 +239,16 @@ export class Enemy extends MoveableObject {
     } else {
       this.canAttack = false;
       this.switchState();
+    }
+  }
+
+  updateVolume() {
+    if (Game.isMuted) {
+      if (this.takeShootDamageSound) this.takeShootDamageSound.muted = true;
+      if (this.takeAttackDamage) this.takeAttackDamage.muted = true;
+    } else {
+      if (this.takeShootDamageSound) this.takeShootDamageSound.muted = false;
+      if (this.takeAttackDamage) this.takeAttackDamage.muted = false;
     }
   }
 }

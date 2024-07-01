@@ -1,4 +1,5 @@
 import { MoveableObject } from "./MoveableObject.js";
+import { Game } from "../core/Game.js";
 
 export class Pepe extends MoveableObject {
   doorUnlocked = false;
@@ -74,22 +75,36 @@ export class Pepe extends MoveableObject {
   }
 
   handleSounds() {
+    if (!this.soundPlayers) {
+      this.soundPlayers = {};
+    }
+
     const playSoundIfNotAlreadyPlaying = (soundName, soundDetails) => {
       if (!this.soundsPlaying[soundName]) {
-        this.playSound(
+        const sound = this.playSound(
           soundDetails.sound,
           soundDetails.volume,
           soundDetails.speed
         );
         this.soundsPlaying[soundName] = true;
-        this.currentSound.onended = () => {
+        this.soundPlayers[soundName] = sound;
+        sound.onended = () => {
           this.soundsPlaying[soundName] = false;
         };
+      }
+      if (Game.isMuted) {
+        this.soundPlayers[soundName].muted = true;
       }
     };
 
     if (this.row === 2 && this.level.isHtmlCollected) {
       playSoundIfNotAlreadyPlaying("sleep", this.sprite.sleep);
+    }
+
+    if (Game.isMuted) {
+      Object.values(this.soundPlayers).forEach((sound) => {
+        sound.muted = true;
+      });
     }
   }
 }

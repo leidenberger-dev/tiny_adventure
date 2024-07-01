@@ -1,4 +1,5 @@
 import { Enemy } from "./Enemy.js";
+import { Game } from "../core/Game.js";
 
 export class Boss extends Enemy {
   constructor(sprite, player, position) {
@@ -15,5 +16,30 @@ export class Boss extends Enemy {
       barOffsetY: 28,
       barHeight: 25,
     };
+  }
+
+  update() {
+    super.update();
+    this.handleChickenSound();
+  }
+
+  handleChickenSound() {
+    if (this.isPlayingChickenSound) return;
+    this.isPlayingChickenSound = true;
+    if (!this.isDead) {
+      this.chickSound = this.playSound(
+        "./assets/sounds/enemy/chicken.mp3",
+        0.7,
+        1
+      );
+    }
+  }
+
+  updateVolume() {
+    if (Game.isMuted) {
+      if (this.chickSound) this.chickSound.muted = true;
+    } else {
+      if (this.chickSound) this.chickSound.muted = false;
+    }
   }
 }

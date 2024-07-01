@@ -1,4 +1,5 @@
 import { playSound } from "../utils/playSound.js";
+import { Game } from "../core/Game.js";
 
 export class CollisionDetector {
   htmlCollected = false;
@@ -18,6 +19,7 @@ export class CollisionDetector {
 
     this.detectGroundCollisions(playerBounds, collisionData);
     this.detectItemCollisions(playerBounds, itemsData);
+    this.updateVolume();
   }
 
   detectCollisionLevel2() {
@@ -28,6 +30,7 @@ export class CollisionDetector {
     this.detectGroundCollisions(playerBounds, collisionData);
     this.detectItemCollisions(playerBounds, itemsData);
     this.detectLadderCollision(playerBounds, ladderData);
+    this.updateVolume();
   }
 
   detectCollisionLevel3() {
@@ -37,6 +40,7 @@ export class CollisionDetector {
 
     this.detectGroundCollisions(playerBounds, collisionData);
     this.detectItemCollisions(playerBounds, itemsData);
+    this.updateVolume();
   }
 
   getPlayerBounds() {
@@ -112,7 +116,7 @@ export class CollisionDetector {
           jumpHeight
         );
         if (this.isCollisionCenter(playerBounds, tileBounds)) {
-          this.playSound("./assets/sounds/item.mp3", 0.1, 1);
+          this.itemSound = this.playSound("./assets/sounds/item.mp3", 0.1, 1);
           if (item === 147) {
             this.javascriptCollected = true;
           }
@@ -133,7 +137,11 @@ export class CollisionDetector {
           }
           if (item === 184) {
             if (this.player.data.health < 100) {
-              this.playSound("./assets/sounds/health.mp3", 0.1, 1);
+              this.healthSound = this.playSound(
+                "./assets/sounds/health.mp3",
+                0.1,
+                1
+              );
             }
             this.player.data.health = 100;
           }
@@ -243,6 +251,16 @@ export class CollisionDetector {
         enemyBounds.top < playerBounds.bottom &&
         enemyBounds.bottom > playerBounds.top
       );
+    }
+  }
+
+  updateVolume() {
+    if (Game.isMuted) {
+      if (this.itemSound) this.itemSound.muted = true;
+      if (this.healthSound) this.healthSound.muted = true;
+    } else {
+      if (this.itemSound) this.itemSound.muted = false;
+      if (this.healthSound) this.healthSound.muted = false;
     }
   }
 }

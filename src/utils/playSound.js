@@ -4,4 +4,5 @@ export function playSound(soundFile, volume = 1, speed = 1) {
   this.currentSound.volume = volume;
   this.currentSound.playbackRate = speed; // Setzt die Wiedergabegeschwindigkeit
   this.currentSound.play();
+  return this.currentSound;
 }

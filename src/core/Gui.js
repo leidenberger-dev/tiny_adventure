@@ -9,6 +9,7 @@ import {
   mobileButtonsSprite,
 } from "../objects/sprites.js";
 import { canvas, ctx } from "../config/canvas.js";
+import { Game } from "./Game.js";
 
 export class Gui {
   constructor() {
@@ -308,6 +309,7 @@ export class Gui {
   onSoundButtonClick() {
     this.soundButton.column = this.activeSoundColor === 2 ? 0 : 2;
     this.activeSoundColor = this.soundButton.column;
+    Game.isMuted = !Game.isMuted;
   }
 
   onPauseButtonClick() {
