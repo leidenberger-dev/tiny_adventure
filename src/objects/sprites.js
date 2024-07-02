@@ -380,7 +380,7 @@ export const bossSprite = {
   },
 
   dead: {
-    row: 4,
+    row: 3,
     maxColumns: 3,
   },
 };
