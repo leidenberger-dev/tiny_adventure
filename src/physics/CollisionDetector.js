@@ -33,13 +33,15 @@ export class CollisionDetector {
     this.updateVolume();
   }
 
-  detectCollisionLevel3() {
+  detectCollisionLevel3(bossIsDead) {
     this.player.isOnGround = false;
     const playerBounds = this.getPlayerBounds();
     const { collisionData, itemsData } = this.mapData;
 
     this.detectGroundCollisions(playerBounds, collisionData);
-    this.detectItemCollisions(playerBounds, itemsData);
+    if (bossIsDead) {
+      this.detectItemCollisions(playerBounds, itemsData);
+    }
     this.updateVolume();
   }
 

@@ -44,7 +44,7 @@ export class Level3 extends Level {
 
   update() {
     this.gravity.applyGravity();
-    this.collisionDetector.detectCollisionLevel3();
+    this.collisionDetector.detectCollisionLevel3(this.boss.isDead);
     this.ladderCollision();
     this.pepe.update();
     this.enemies.forEach((enemy) => enemy.update());

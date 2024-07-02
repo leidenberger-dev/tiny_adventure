@@ -9,7 +9,7 @@ export class Renderer {
     this.startSceenImage.src = "./assets/img/startscreen.png";
     this.level = level;
     this.camera = new Camera(this.level.player, this.level);
-    this.gui = gui ? gui : new Gui(this.level.pause);
+    this.gui = gui ? gui : new Gui();
     this.checkStartScreen();
   }
 
@@ -29,7 +29,7 @@ export class Renderer {
 
     this.update();
     this.drawScene();
-    this.gui.draw(this.level.pause);
+    this.gui.draw(this.level.pause, this.level.levelNumber);
   }
 
   drawScene() {

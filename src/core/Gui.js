@@ -20,6 +20,8 @@ export class Gui {
     this.tryAgainClicked = false;
     this.gameOverImage = new Image();
     this.gameOverImage.src = "./assets/img/youlost.png";
+    this.youWinImage = new Image();
+    this.youWinImage.src = "./assets/img/win_2.png";
     this.healthbar = new GameObject(barsSprite);
     this.healthbar.column = 5;
     this.pointsbar = new GameObject(barsSprite);
@@ -105,7 +107,7 @@ export class Gui {
     this.handlePlayerHealth();
   }
 
-  draw(isPause) {
+  draw(isPause, levelNumber) {
     this.isPause = isPause;
     if (!this.isPauseBtnHover) {
       this.pauseButton.column = this.isPause ? 2 : 0;
@@ -126,6 +128,7 @@ export class Gui {
     this.pauseButton.draw();
     this.menuButton.draw();
     this.drawGameOver();
+    this.drawYouWin(levelNumber);
     if (window.matchMedia("(hover: none) and (pointer: coarse)").matches) {
       // Zeichnen Sie die mobilen Buttons nur, wenn das Gerät ein Touchscreen ist
       this.mobileLeft.draw();
@@ -177,6 +180,15 @@ export class Gui {
     if (this.player.data.health < 1) {
       ctx.drawImage(this.gameOverImage, 0, 0, canvas.width, canvas.height);
       this.tryAgainButton.draw();
+    }
+  }
+
+  async drawYouWin(levelNumber) {
+    if (levelNumber === 3 && this.player.data.points === this.maxPoints) {
+      ctx.drawImage(this.youWinImage, 0, 0, canvas.width, canvas.height);
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
     }
   }
 
@@ -324,7 +336,6 @@ export class Gui {
 
   getTryAgainStatus() {
     const wasClicked = this.tryAgainClicked;
-    // Setzen Sie tryAgainClicked zurück, nachdem der Status abgefragt wurde
     this.tryAgainClicked = false;
     return wasClicked;
   }
