@@ -26,7 +26,8 @@ export class Camera {
       this.player.position.y -
       canvas.height / 2 +
       this.player.frameHeight / 2 -
-      this.tileHeight / 2;
+      this.tileHeight / 2 -
+      50;
 
     if (this.x < this.cameraMapStart) {
       this.x = this.cameraMapStart;
