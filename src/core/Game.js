@@ -19,10 +19,10 @@ export class Game {
     this.input = handleInput;
     this.input();
     this.level = new Level1();
-    this.renderer = new Renderer(this.level);
     this.playSound = playSound;
     this.soundsPlaying = {};
     this.loadLevel().then(() => {
+      this.renderer = new Renderer(this.level);
       this.isLoadingLevel = false;
       this.start();
     });
@@ -86,9 +86,9 @@ export class Game {
       this.isLoadingLevel = true;
       await preloadAssets();
       this.level = new levels[this.level.levelNumber]();
-      this.renderer = new Renderer(this.level, guiSettings);
       this.renderer.gui.pointsbar.column = 0;
       await this.loadLevel().then(() => {
+        this.renderer = new Renderer(this.level, guiSettings);
         this.isLoadingLevel = false;
         this.start();
       });
