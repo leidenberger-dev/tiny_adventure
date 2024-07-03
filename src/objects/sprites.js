@@ -331,6 +331,23 @@ export const mainButtonsSprite = {
   mirrorPoint: 1.2,
 };
 
+export const keysSprite = {
+  img: "./assets/img/keys.png",
+  position: {
+    x: 0,
+    y: 0,
+  },
+  frameWidth: 335,
+  frameHeight: 446,
+  maxColumns: 5,
+  offsetX: 20,
+  offsetY: 70,
+  offsetWidth: 100,
+  offsetHeight: 85,
+  animationSpeed: 5,
+  mirrorPoint: 1.2,
+};
+
 export const arrowsAmountSprite = {
   img: "./assets/img/arrows-amount.png",
   position: {
