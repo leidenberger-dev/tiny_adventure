@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
   setupCanvas();
   preloadAssets()
     .then(() => {
-      console.log("Alle Assets wurden vorgeladen.");
       const game = new Game();
       window.devMode = game.devMode.bind(game);
     })
