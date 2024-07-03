@@ -1,103 +1,16 @@
-import { GameObject } from "../objects/GameObject.js";
-import { Player } from "../objects/Player.js";
-import {
-  arrowsAmountSprite,
-  barsSprite,
-  boySprite,
-  buttonsSprite,
-  mainButtonsSprite,
-  mobileButtonsSprite,
-} from "../objects/sprites.js";
 import { canvas, ctx } from "../config/canvas.js";
 import { Game } from "./Game.js";
+import { pressedKeys } from "../config/keys.js";
+import { guiElements } from "./guiElements.js";
 
 export class Gui {
   constructor() {
-    this.initEvents();
     this.startButtonActive = false;
     this.startScreen = false;
-    this.player = new Player(boySprite);
-    this.tryAgainClicked = false;
-    this.gameOverImage = new Image();
-    this.gameOverImage.src = "./assets/img/youlost.png";
-    this.youWinImage = new Image();
-    this.youWinImage.src = "./assets/img/win_2.png";
-    this.healthbar = new GameObject(barsSprite);
-    this.healthbar.column = 5;
-    this.pointsbar = new GameObject(barsSprite);
-    this.pointsbar.row = 1;
-    this.pointsbar.position.x += this.pointsbar.frameWidth;
-    this.soundButton = new GameObject(buttonsSprite);
-    this.soundButton.position = {
-      x: 900,
-      y: 12,
-    };
-    this.pauseButton = new GameObject(buttonsSprite);
-    this.pauseButton.row = 1;
-    this.pauseButton.position = {
-      x: 1020,
-      y: 12,
-    };
-    this.menuButton = new GameObject(buttonsSprite);
-    this.menuButton.row = 2;
-    this.menuButton.position = {
-      x: 1140,
-      y: 12,
-    };
-    this.mobileLeft = new GameObject(mobileButtonsSprite);
-    this.mobileLeft.row = 0;
-    this.mobileLeft.column = 3;
-    this.mobileLeft.position = {
-      x: 100,
-      y: 525,
-    };
-    this.mobileRight = new GameObject(mobileButtonsSprite);
-    this.mobileRight.row = 0;
-    this.mobileRight.column = 1;
-    this.mobileRight.position = {
-      x: 250,
-      y: 525,
-    };
-    this.mobileBButton = new GameObject(mobileButtonsSprite);
-    this.mobileBButton.row = 2;
-    this.mobileBButton.column = 2;
-    this.mobileBButton.position = {
-      x: 975,
-      y: 550,
-    };
-    this.mobileYButton = new GameObject(mobileButtonsSprite);
-    this.mobileYButton.row = 2;
-    this.mobileYButton.column = 0;
-    this.mobileYButton.position = {
-      x: 850,
-      y: 450,
-    };
-    this.mobileAButton = new GameObject(mobileButtonsSprite);
-    this.mobileAButton.row = 2;
-    this.mobileAButton.column = 3;
-    this.mobileAButton.position = {
-      x: 1100,
-      y: 450,
-    };
-
-    this.arrowsAmount = new GameObject(arrowsAmountSprite);
-    this.arrowsAmount.position = {
-      x: 600,
-      y: 0,
-    };
-
-    this.startButton = new GameObject(mainButtonsSprite);
-    this.startButton.position = {
-      x: 500,
-      y: 580,
-    };
-
-    this.tryAgainButton = new GameObject(mainButtonsSprite);
-    this.tryAgainButton.row = 1;
-    this.tryAgainButton.position = {
-      x: 500,
-      y: 580,
-    };
+    this.touchScreen = false;
+    guiElements.call(this);
+    this.checkTouchScreen();
+    this.initEvents();
   }
 
   update(maxPoints) {
@@ -108,9 +21,13 @@ export class Gui {
   }
 
   draw(isPause, levelNumber) {
+    this.checkLandscape();
     this.isPause = isPause;
     if (!this.isPauseBtnHover) {
       this.pauseButton.column = this.isPause ? 2 : 0;
+    }
+    if (!this.touchScreen) {
+      this.keysOverview.draw();
     }
     if (this.levelNumber > 1) {
       this.healthbar.draw();
@@ -120,17 +37,19 @@ export class Gui {
       this.drawArrowsNumber();
     }
 
+    if (this.landscape) {
+      this.menuButton.draw();
+    }
+
     this.soundButton.draw();
     if (this.startScreen) {
       this.startButton.draw();
       return;
     }
     this.pauseButton.draw();
-    this.menuButton.draw();
     this.drawGameOver();
     this.drawYouWin(levelNumber);
-    if (window.matchMedia("(hover: none) and (pointer: coarse)").matches) {
-      // Zeichnen Sie die mobilen Buttons nur, wenn das Gerät ein Touchscreen ist
+    if (this.touchScreen) {
       this.mobileLeft.draw();
       this.mobileRight.draw();
       this.mobileBButton.draw();
@@ -195,6 +114,77 @@ export class Gui {
   initEvents() {
     window.addEventListener("click", (e) => this.handleMouseClick(e));
     window.addEventListener("mousemove", (e) => this.handleMouseMove(e));
+    window.addEventListener("touchstart", (e) => this.handleTouchStart(e));
+    window.addEventListener("touchend", (e) => this.handleTouchEnd(e));
+    window.addEventListener("touchmove", (e) => this.handleTouchMove(e));
+  }
+
+  handleTouchStart(e) {
+    const { x, y } = this.getTouchPos(e);
+    if (this.isTouchOverButton(x, y, this.mobileLeft)) {
+      this.onMobileLeftButtonTouchStart();
+    }
+    //right button, jump, shoot, attack
+    if (this.isTouchOverButton(x, y, this.mobileRight)) {
+      pressedKeys.right = true;
+    }
+    if (this.isTouchOverButton(x, y, this.mobileBButton)) {
+      pressedKeys.up = true;
+    }
+    if (this.isTouchOverButton(x, y, this.mobileYButton)) {
+      pressedKeys.attack = true;
+    }
+    if (this.isTouchOverButton(x, y, this.mobileAButton)) {
+      pressedKeys.shoot = true;
+    }
+  }
+
+  handleTouchMove(e) {
+    const { x, y } = this.getTouchPos(e);
+    if (!this.isTouchOverButton(x, y, this.mobileLeft)) {
+      pressedKeys.left = false;
+    }
+    if (!this.isTouchOverButton(x, y, this.mobileRight)) {
+      pressedKeys.right = false;
+    }
+  }
+
+  handleTouchEnd(e) {
+    const { x, y } = this.getTouchPos(e);
+    if (this.isTouchOverButton(x, y, this.mobileLeft)) {
+      this.onMobileLeftButtonTouchEnd();
+    }
+    if (this.isTouchOverButton(x, y, this.mobileRight)) {
+      pressedKeys.right = false;
+    }
+    if (this.isTouchOverButton(x, y, this.mobileBButton)) {
+      pressedKeys.up = false;
+    }
+    if (this.isTouchOverButton(x, y, this.mobileYButton)) {
+      pressedKeys.attack = false;
+    }
+    if (this.isTouchOverButton(x, y, this.mobileAButton)) {
+      pressedKeys.shoot = false;
+    }
+  }
+
+  getTouchPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+      x: (e.changedTouches[0].clientX - rect.left) * scaleX,
+      y: (e.changedTouches[0].clientY - rect.top) * scaleY,
+    };
+  }
+
+  isTouchOverButton(touchX, touchY, button) {
+    return (
+      touchX >= button.position.x &&
+      touchX <= button.position.x + button.frameWidth &&
+      touchY >= button.position.y &&
+      touchY <= button.position.y + button.frameHeight
+    );
   }
 
   handleMouseClick(e) {
@@ -215,6 +205,9 @@ export class Gui {
       this.player.data.health < 1
     ) {
       this.onTryAgainButtonClick();
+    }
+    if (this.isMouseOverButton(x, y, this.menuButton)) {
+      this.onMenuButtonClick();
     }
   }
 
@@ -338,5 +331,76 @@ export class Gui {
     const wasClicked = this.tryAgainClicked;
     this.tryAgainClicked = false;
     return wasClicked;
+  }
+  onMobileLeftButtonTouchStart() {
+    pressedKeys.left = true;
+  }
+
+  onMobileLeftButtonTouchEnd() {
+    pressedKeys.left = false;
+  }
+
+  onMenuButtonClick() {
+    const canvas = document.getElementById("game");
+    const toggleFullScreenClass = () => {
+      if (document.fullscreenElement) {
+        canvas.classList.add("fullscreen-canvas");
+      } else {
+        canvas.classList.remove("fullscreen-canvas");
+      }
+    };
+
+    // Überprüfen, ob wir bereits im Vollbildmodus sind
+    if (!document.fullscreenElement) {
+      if (canvas.requestFullscreen) {
+        canvas.requestFullscreen().then(toggleFullScreenClass);
+      } else if (canvas.mozRequestFullScreen) {
+        /* Firefox */
+        canvas.mozRequestFullScreen().then(toggleFullScreenClass);
+      } else if (canvas.webkitRequestFullscreen) {
+        /* Chrome, Safari & Opera */
+        canvas.webkitRequestFullscreen().then(toggleFullScreenClass);
+      } else if (canvas.msRequestFullscreen) {
+        /* IE/Edge */
+        canvas.msRequestFullscreen().then(toggleFullScreenClass);
+      }
+    } else {
+      // Vollbildmodus verlassen, wenn aktiv
+      if (document.exitFullscreen) {
+        document.exitFullscreen().then(toggleFullScreenClass);
+      } else if (document.mozCancelFullScreen) {
+        /* Firefox */
+        document.mozCancelFullScreen().then(toggleFullScreenClass);
+      } else if (document.webkitExitFullscreen) {
+        /* Chrome, Safari & Opera */
+        document.webkitExitFullscreen().then(toggleFullScreenClass);
+      } else if (document.msExitFullscreen) {
+        /* IE/Edge */
+        document.msExitFullscreen().then(toggleFullScreenClass);
+      }
+    }
+
+    document.addEventListener("fullscreenchange", toggleFullScreenClass);
+  }
+
+  checkTouchScreen() {
+    if (window.matchMedia("(hover: none) and (pointer: coarse)").matches) {
+      this.touchScreen = true;
+    }
+    if (
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0 ||
+      navigator.msMaxTouchPoints > 0
+    ) {
+      this.touchScreen = true;
+    }
+  }
+
+  checkLandscape() {
+    if (window.matchMedia("(orientation: landscape)").matches) {
+      this.landscape = true;
+    } else {
+      this.landscape = false;
+    }
   }
 }
