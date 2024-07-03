@@ -105,6 +105,10 @@ export class Pepe extends MoveableObject {
       Object.values(this.soundPlayers).forEach((sound) => {
         sound.muted = true;
       });
+    } else {
+      Object.values(this.soundPlayers).forEach((sound) => {
+        sound.muted = false;
+      });
     }
   }
 }
