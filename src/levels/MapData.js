@@ -71,7 +71,7 @@ export class MapData {
     }
   }
 
-  drawItemsLayer(jumpHeight) {
+  drawItemsLayer(jumpHeight, html, css) {
     for (let i = 0; i < this.itemsData.length; i++) {
       const x = (i % this.mapWidth) * this.tileWidth;
       const y = Math.floor(i / this.mapWidth) * this.tileHeight + jumpHeight;
@@ -90,18 +90,24 @@ export class MapData {
           image = this.arrows;
           break;
         case 147:
-          image = this.javascript;
+          if (css) {
+            image = this.javascript;
+          }
           break;
         case 148:
           image = this.html;
           break;
         case 149:
-          image = this.css;
+          if (html) {
+            image = this.css;
+          }
           break;
         default:
           continue;
       }
-      ctx.drawImage(image, x, y, this.tileWidth, this.tileHeight);
+      if (image) {
+        ctx.drawImage(image, x, y, this.tileWidth, this.tileHeight);
+      }
     }
   }
 }

@@ -93,9 +93,13 @@ export class Level1 extends Level {
       }
     }
 
-    this.mapData.drawItemsLayer(this.player.jumpHeight);
+    this.mapData.drawItemsLayer(
+      this.player.jumpHeight,
+      this.isHtmlCollected,
+      this.isCssCollected
+    );
 
-    this.signSteps();
+    //this.signSteps();
 
     if (!this.drawOnce) {
       this.drawOnceAndPause();
@@ -138,7 +142,7 @@ export class Level1 extends Level {
       this[item.collected] = true;
       this[item.showStep] = true;
       this[item.counter]++;
-      this.pause = true;
+      this.pause = false;
     }
   }
 }
