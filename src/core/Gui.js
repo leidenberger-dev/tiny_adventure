@@ -1,16 +1,15 @@
 import { canvas, ctx } from "../config/canvas.js";
 import { Game } from "./Game.js";
 import { pressedKeys } from "../config/keys.js";
-import { guiElements } from "./guiElements.js";
+import { GuiManager } from "./GuiManager.js";
 
-export class Gui {
+export class Gui extends GuiManager {
   constructor() {
+    super();
     this.startButtonActive = false;
     this.startScreen = false;
     this.touchScreen = false;
-    guiElements.call(this);
     this.checkTouchScreen();
-    this.initEvents();
   }
 
   update(maxPoints) {
@@ -56,6 +55,10 @@ export class Gui {
       this.mobileYButton.draw();
       this.mobileAButton.draw();
     }
+
+    if (this.isPause) {
+      this.drawPaused();
+    }
   }
 
   handleCollectPoint(maxPoints) {
@@ -95,6 +98,15 @@ export class Gui {
     ctx.strokeText(this.player.data.points, 230, 33.5);
   }
 
+  drawPaused() {
+    ctx.font = `bold 25px "Comic Sans MS"`;
+    ctx.fillStyle = "white";
+    ctx.fillText("Paused", 380, 200);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1.5;
+    ctx.strokeText("Paused", 380, 200);
+  }
+
   drawGameOver() {
     if (this.player.data.health < 1) {
       ctx.drawImage(this.gameOverImage, 0, 0, canvas.width, canvas.height);
@@ -102,229 +114,12 @@ export class Gui {
     }
   }
 
-  async drawYouWin(levelNumber) {
+  drawYouWin(levelNumber) {
     if (levelNumber === 3 && this.player.data.points === this.maxPoints) {
       ctx.drawImage(this.youWinImage, 0, 0, canvas.width, canvas.height);
-      setTimeout(() => {
-        location.reload();
-      }, 1000);
+      this.tryAgainButton.draw();
+      this.isWin = true;
     }
-  }
-
-  initEvents() {
-    window.addEventListener("click", (e) => this.handleMouseClick(e));
-    window.addEventListener("mousemove", (e) => this.handleMouseMove(e));
-    window.addEventListener("touchstart", (e) => this.handleTouchStart(e));
-    window.addEventListener("touchend", (e) => this.handleTouchEnd(e));
-    window.addEventListener("touchmove", (e) => this.handleTouchMove(e));
-  }
-
-  handleTouchStart(e) {
-    const { x, y } = this.getTouchPos(e);
-    if (this.isTouchOverButton(x, y, this.mobileLeft)) {
-      this.onMobileLeftButtonTouchStart();
-    }
-    //right button, jump, shoot, attack
-    if (this.isTouchOverButton(x, y, this.mobileRight)) {
-      pressedKeys.right = true;
-    }
-    if (this.isTouchOverButton(x, y, this.mobileBButton)) {
-      pressedKeys.up = true;
-    }
-    if (this.isTouchOverButton(x, y, this.mobileYButton)) {
-      pressedKeys.attack = true;
-    }
-    if (this.isTouchOverButton(x, y, this.mobileAButton)) {
-      pressedKeys.shoot = true;
-    }
-  }
-
-  handleTouchMove(e) {
-    const { x, y } = this.getTouchPos(e);
-    if (!this.isTouchOverButton(x, y, this.mobileLeft)) {
-      pressedKeys.left = false;
-    }
-    if (!this.isTouchOverButton(x, y, this.mobileRight)) {
-      pressedKeys.right = false;
-    }
-  }
-
-  handleTouchEnd(e) {
-    const { x, y } = this.getTouchPos(e);
-    if (this.isTouchOverButton(x, y, this.mobileLeft)) {
-      this.onMobileLeftButtonTouchEnd();
-    }
-    if (this.isTouchOverButton(x, y, this.mobileRight)) {
-      pressedKeys.right = false;
-    }
-    if (this.isTouchOverButton(x, y, this.mobileBButton)) {
-      pressedKeys.up = false;
-    }
-    if (this.isTouchOverButton(x, y, this.mobileYButton)) {
-      pressedKeys.attack = false;
-    }
-    if (this.isTouchOverButton(x, y, this.mobileAButton)) {
-      pressedKeys.shoot = false;
-    }
-  }
-
-  getTouchPos(e) {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    return {
-      x: (e.changedTouches[0].clientX - rect.left) * scaleX,
-      y: (e.changedTouches[0].clientY - rect.top) * scaleY,
-    };
-  }
-
-  isTouchOverButton(touchX, touchY, button) {
-    return (
-      touchX >= button.position.x &&
-      touchX <= button.position.x + button.frameWidth &&
-      touchY >= button.position.y &&
-      touchY <= button.position.y + button.frameHeight
-    );
-  }
-
-  handleMouseClick(e) {
-    const { x, y } = this.getMousePos(e);
-    if (this.isMouseOverButton(x, y, this.startButton)) {
-      if (this.startButtonActive) {
-        this.onStartButtonClick();
-      }
-    }
-    if (this.isMouseOverButton(x, y, this.soundButton)) {
-      this.onSoundButtonClick();
-    }
-    if (this.isMouseOverButton(x, y, this.pauseButton)) {
-      this.onPauseButtonClick();
-    }
-    if (
-      this.isMouseOverButton(x, y, this.tryAgainButton) &&
-      this.player.data.health < 1
-    ) {
-      this.onTryAgainButtonClick();
-    }
-    if (this.isMouseOverButton(x, y, this.menuButton)) {
-      this.onMenuButtonClick();
-    }
-  }
-
-  handleMouseMove(e) {
-    const { x, y } = this.getMousePos(e);
-    const isOverStartButton = this.isMouseOverButton(x, y, this.startButton);
-    const isOverSoundButton = this.isMouseOverButton(x, y, this.soundButton);
-    const isOverPauseButton = this.isMouseOverButton(x, y, this.pauseButton);
-    const isOverTryAgainButton = this.isMouseOverButton(
-      x,
-      y,
-      this.tryAgainButton
-    );
-
-    // Logic for the Start Button
-    if (
-      this.startButtonActive &&
-      isOverStartButton &&
-      this.hoveredButton !== this.startButton
-    ) {
-      this.activeStartColor = this.soundButton.column;
-      this.hoveredButton = this.startButton;
-      canvas.style.cursor = "pointer";
-      this.startButton.column = 1;
-    } else if (!isOverStartButton && this.hoveredButton === this.startButton) {
-      this.resetHoveredButton();
-      this.startButton.column = this.activeStartColor;
-    }
-
-    // Logic for the Sound Button
-    if (isOverSoundButton && this.hoveredButton !== this.soundButton) {
-      this.activeSoundColor = this.soundButton.column;
-      this.hoveredButton = this.soundButton;
-      canvas.style.cursor = "pointer";
-      this.soundButton.column = 1;
-    } else if (!isOverSoundButton && this.hoveredButton === this.soundButton) {
-      this.resetHoveredButton();
-      this.soundButton.column = this.activeSoundColor;
-    }
-    if (this.startScreen) return;
-
-    // Pause Button Logic
-    if (isOverPauseButton && this.hoveredButton !== this.pauseButton) {
-      this.hoveredButton = this.pauseButton;
-      canvas.style.cursor = "pointer";
-      this.isPauseBtnHover = true;
-      this.pauseButton.column = 1;
-    } else if (!isOverPauseButton && this.hoveredButton === this.pauseButton) {
-      this.pauseBtnHover = false;
-      this.resetHoveredButton();
-      this.pauseButton.column = this.isPause ? 2 : 0;
-    }
-
-    // Menu Button Logic
-
-    // Mobile Buttons Logic
-
-    // Try Again Button Logic
-    if (isOverTryAgainButton && this.player.data.health < 1) {
-      this.hoveredButton = this.tryAgainButton;
-      canvas.style.cursor = "pointer";
-      this.isTryAgainBtnHover = true;
-      this.tryAgainButton.column = 1;
-    } else if (
-      !isOverTryAgainButton &&
-      this.hoveredButton === this.tryAgainButton
-    ) {
-      this.resetHoveredButton();
-      this.tryAgainButton.column = 0;
-    }
-  }
-
-  resetHoveredButton() {
-    this.hoveredButton = null;
-    canvas.style.cursor = "default";
-  }
-
-  getMousePos(e) {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    return {
-      x: (e.clientX - rect.left) * scaleX,
-      y: (e.clientY - rect.top) * scaleY,
-    };
-  }
-
-  isMouseOverButton(mouseX, mouseY, button) {
-    return (
-      mouseX >= button.position.x &&
-      mouseX <= button.position.x + button.frameWidth &&
-      mouseY >= button.position.y &&
-      mouseY <= button.position.y + button.frameHeight
-    );
-  }
-
-  onStartButtonClick() {
-    this.startScreen = false;
-    this.startButtonActive = false;
-    this.hoveredButton = null;
-    canvas.style.cursor = "default";
-  }
-
-  onSoundButtonClick() {
-    this.soundButton.column = this.activeSoundColor === 2 ? 0 : 2;
-    this.activeSoundColor = this.soundButton.column;
-    Game.isMuted = !Game.isMuted;
-  }
-
-  onPauseButtonClick() {
-    this.pauseButton.column = this.isPause ? 2 : 0;
-    this.isPauseBtnHover = false;
-    this.isPause = !this.isPause;
-  }
-
-  onTryAgainButtonClick() {
-    this.tryAgainClicked = true;
   }
 
   getTryAgainStatus() {
@@ -402,5 +197,16 @@ export class Gui {
     } else {
       this.landscape = false;
     }
+  }
+
+  drawTurnDevice() {
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = `bold 25px "Comic Sans MS"`;
+    ctx.fillStyle = "white";
+    ctx.fillText("Please turn your device", 320, 200);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1.5;
+    ctx.strokeText("Please turn your device ", 320, 200);
   }
 }

@@ -4,12 +4,12 @@ import { Gui } from "./Gui.js";
 
 let startScreen = true;
 export class Renderer {
-  constructor(level) {
+  constructor(level, gui = null) {
     this.startSceenImage = new Image();
     this.startSceenImage.src = "./assets/img/startscreen.png";
     this.level = level;
     this.camera = new Camera(this.level.player, this.level);
-    this.gui = new Gui();
+    this.gui = gui ? gui : new Gui();
     this.checkStartScreen();
   }
 
