@@ -51,7 +51,6 @@ export function preloadAssets() {
     "./assets/sounds/enemy/takeDamage.mp3",
     "./assets/sounds/enemy/chicken.mp3",
     "./assets/sounds/music.mp3",
-    "./assets/sounds/world.wav",
     "./assets/sounds/health.mp3",
     "./assets/sounds/item.mp3",
   ];

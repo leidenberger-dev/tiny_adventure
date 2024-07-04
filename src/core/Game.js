@@ -120,18 +120,14 @@ export class Game {
       this.isMusicPlaying = true;
       this.musicSound = this.playSound("./assets/sounds/music.mp3", 0.7, 1);
       this.musicSound.loop = true;
-      this.worldSound = this.playSound("./assets/sounds/world.wav", 0.5, 1);
-      this.worldSound.loop = true;
     }
   }
 
   updateVolume() {
     if (Game.isMuted) {
       if (this.musicSound) this.musicSound.muted = true;
-      if (this.worldSound) this.worldSound.muted = true;
     } else {
       if (this.musicSound) this.musicSound.muted = false;
-      if (this.worldSound) this.worldSound.muted = false;
     }
   }
 }
