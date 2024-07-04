@@ -8,10 +8,10 @@ export class Enemy extends MoveableObject {
     this.healthBarPosition = {
       x: this.position.x,
       y: this.position.y,
-      width: 200,
-      height: 40,
+      width: 100,
+      height: 20,
       barOffsetY: -5,
-      barHeight: 18,
+      barHeight: 10,
     };
 
     this.maxHealth = 100;

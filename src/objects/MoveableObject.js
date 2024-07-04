@@ -2,7 +2,7 @@ import { GameObject } from "./GameObject.js";
 import { playSound } from "../utils/playSound.js";
 export class MoveableObject extends GameObject {
   counter = 0;
-  speed = 1;
+  speed = 0.5;
   isJumping = false;
   devModeVisual = true;
   constructor(sprite, player) {

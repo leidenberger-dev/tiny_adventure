@@ -37,7 +37,7 @@ export class Gui {
       this.drawArrowsNumber();
     }
 
-    if (this.landscape) {
+    if (this.landscape && this.touchScreen) {
       this.menuButton.draw();
     }
 
@@ -78,21 +78,21 @@ export class Gui {
   }
 
   drawArrowsNumber() {
-    ctx.font = `bold 50px "Comic Sans MS"`;
+    ctx.font = `bold 25px "Comic Sans MS"`;
     ctx.fillStyle = "white";
-    ctx.fillText(this.player.data.arrows, 685, 67);
+    ctx.fillText(this.player.data.arrows, 342.5, 33.5);
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 3;
-    ctx.strokeText(this.player.data.arrows, 685, 67);
+    ctx.lineWidth = 1.5;
+    ctx.strokeText(this.player.data.arrows, 342.5, 33.5);
   }
 
   drawPointsNumber() {
-    ctx.font = `bold 50px "Comic Sans MS"`;
+    ctx.font = `bold 25px "Comic Sans MS"`;
     ctx.fillStyle = "white";
-    ctx.fillText(this.player.data.points, 460, 67);
+    ctx.fillText(this.player.data.points, 230, 33.5);
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 3;
-    ctx.strokeText(this.player.data.points, 460, 67);
+    ctx.lineWidth = 1.5;
+    ctx.strokeText(this.player.data.points, 230, 33.5);
   }
 
   drawGameOver() {

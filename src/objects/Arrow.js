@@ -1,14 +1,14 @@
 import { MoveableObject } from "./MoveableObject.js";
 
 export class Arrow extends MoveableObject {
-  position = { x: 200, y: 2300 };
+  position = { x: 100, y: 1150 };
   constructor(sprite, player) {
     super(sprite, player);
     this.player = player;
     this.isFlying = false;
     this.flyingTime = 0;
     this.flyingRoute = 40;
-    this.speed = 10;
+    this.speed = 5;
     this.hasDamaged = false;
   }
 
@@ -24,8 +24,8 @@ export class Arrow extends MoveableObject {
   }
 
   resetArrowPosition() {
-    const OFFSET_X = 45;
-    const OFFSET_Y = 130;
+    const OFFSET_X = 22.5;
+    const OFFSET_Y = 65;
     this.position.x = this.player.position.x + OFFSET_X;
     this.position.y = this.player.position.y + OFFSET_Y;
   }

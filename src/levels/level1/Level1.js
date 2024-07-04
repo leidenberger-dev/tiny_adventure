@@ -13,18 +13,18 @@ const levelSettings = {
   foreground: "./assets/img/level1/mapLevel1Foreground.png",
   background: "./assets/img/bg.png",
   clouds: "./assets/img/clouds.png",
-  startPointX: 2500,
-  startPointY: 1231,
+  startPointX: 1250,
+  startPointY: 615.5,
 };
 
 export class Level1 extends Level {
   pepePosition = {
-    x: 3180,
-    y: 1015,
+    x: 1590,
+    y: 507.5,
   };
   doorPosition = {
-    x: 3310,
-    y: 1200,
+    x: 1655,
+    y: 600,
   };
   isHtmlCollected = false;
   isCssCollected = false;

@@ -7,7 +7,7 @@ export class Pepe extends MoveableObject {
   constructor(sprite, player, level, position) {
     super(sprite, player);
     this.position = position;
-    this.targetX = this.position.x + 128;
+    this.targetX = this.position.x + 64;
     this.level = level;
     this.activeAnimation = () => {
       this.animation(this.sprite.sleep);

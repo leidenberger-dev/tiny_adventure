@@ -40,7 +40,7 @@ export class Level {
   drawBackground() {
     const parallaxFactor = 0.15;
     const backgroundColor = "#6ED0CF";
-    const backgroundYOffset = -500;
+    const backgroundYOffset = -250;
     const backgroundX = this.player.position.x * parallaxFactor;
 
     ctx.fillStyle = backgroundColor;
@@ -58,7 +58,7 @@ export class Level {
   }
 
   updateCloudPosition() {
-    const cloudSpeed = 0.8;
+    const cloudSpeed = 0.4;
     const resetPosition = 0;
     if (this.isJavascriptCollected) {
       this.cloudX -= cloudSpeed;
@@ -69,7 +69,7 @@ export class Level {
   }
 
   drawClouds() {
-    const cloudY = 110;
+    const cloudY = 55;
     this.updateCloudPosition();
     ctx.drawImage(this.clouds, this.cloudX, cloudY);
   }
@@ -86,6 +86,6 @@ export class Level {
   }
 
   drawForeground() {
-    ctx.drawImage(this.foreground, 0, this.player.jumpHeight + 30);
+    ctx.drawImage(this.foreground, 0, this.player.jumpHeight + 15);
   }
 }

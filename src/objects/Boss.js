@@ -6,15 +6,15 @@ export class Boss extends Enemy {
     super(sprite, player, position);
     this.damageBox = { x: sprite.offsetX, y: sprite.offsetY };
     this.damageBoxAttacking = { x: sprite.offsetX - 50, y: sprite.offsetY };
-    this.speed = 1;
+    this.speed = 0.5;
     this.damageAmount = 5;
     this.healthBarPosition = {
       x: this.position.x,
       y: this.position.y,
-      width: 300,
-      height: 60,
-      barOffsetY: 28,
-      barHeight: 25,
+      width: 150,
+      height: 30,
+      barOffsetY: 14,
+      barHeight: 12.5,
     };
   }
 

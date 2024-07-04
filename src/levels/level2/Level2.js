@@ -22,26 +22,26 @@ const levelSettings = {
   foreground: "./assets/img/level2/mapLevel2Foreground.png",
   background: "./assets/img/bg.png",
   clouds: "./assets/img/clouds.png",
-  startPointX: 550,
-  startPointY: 1200,
+  startPointX: 225,
+  startPointY: 550,
   maxPoints: 10,
   minArrows: 5,
 };
 
 export class Level2 extends Level {
-  doorPosition = { x: 560, y: 815 };
-  pepePosition = { x: 400, y: 625 };
-  wolf1Data = { x: 1120, y: 1245, walkRoute: 50 };
-  wolf2Data = { x: 2640, y: 730, walkRoute: 120 };
-  bisonData = { x: 2400, y: 1190, walkRoute: 150 };
-  bison2Data = { x: 2000, y: 170, walkRoute: 80 };
-  bearData = { x: 1200, y: 280, walkRoute: 130 };
+  doorPosition = { x: 280, y: 407.5 };
+  pepePosition = { x: 200, y: 312.5 };
+  wolf1Data = { x: 560, y: 622.5, walkRoute: 25 };
+  wolf2Data = { x: 1320, y: 365, walkRoute: 60 };
+  bisonData = { x: 1200, y: 595, walkRoute: 75 };
+  bison2Data = { x: 1000, y: 85, walkRoute: 40 };
+  bearData = { x: 600, y: 140, walkRoute: 65 };
 
   constructor() {
     super(levelSettings);
 
     this.pepe = new Pepe(pepeSprite, this.player, this, this.pepePosition);
-    this.pepe.targetX = this.pepe.position.x + 5;
+    this.pepe.targetX = this.pepe.position.x + 2.5;
     this.door = new Door(doorSprite, this.player, this.doorPosition, this.pepe);
     this.wolf = new Wolf(wolfSprite, this.player, this.wolf1Data);
     this.wolf2 = new Wolf(wolfSprite, this.player, this.wolf2Data);

@@ -85,7 +85,7 @@ export class CollisionDetector {
   detectGroundCollisions(playerBounds, collisionData) {
     const { mapWidth, tileWidth, tileHeight } = this.mapData;
     const jumpHeight = this.player.jumpHeight;
-    const collisionOffset = 30;
+    const collisionOffset = 15;
 
     collisionData.forEach((tile, i) => {
       if (tile !== 0) {
@@ -195,7 +195,7 @@ export class CollisionDetector {
   }
 
   isCollisionLadder(playerBounds, tileBounds) {
-    const expand = 40;
+    const expand = 20;
     return (
       playerBounds.bottom > tileBounds.top &&
       playerBounds.top < tileBounds.bottom + expand &&
@@ -205,7 +205,7 @@ export class CollisionDetector {
   }
 
   isCollisionPepe(playerBounds, tileBounds) {
-    const height = 60;
+    const height = 30;
     return (
       playerBounds.bottom > tileBounds.top &&
       playerBounds.top < tileBounds.bottom - height &&
@@ -237,7 +237,7 @@ export class CollisionDetector {
   }
 
   isCollisionWithPlayerHead(enemyBounds, playerBounds, enemyFacingRight) {
-    const playerWidth = 200;
+    const playerWidth = 100;
 
     if (enemyFacingRight) {
       return (

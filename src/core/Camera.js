@@ -3,8 +3,8 @@ import { canvas } from "../config/canvas.js";
 export class Camera {
   x = 1;
   y = 0;
-  tileHeight = 128;
-  lowestPlayerPositionY = 1350;
+  tileHeight = 64;
+  lowestPlayerPositionY = 675;
 
   constructor(player, level) {
     this.level = level;

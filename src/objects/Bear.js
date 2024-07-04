@@ -5,7 +5,7 @@ export class Bear extends Enemy {
     super(sprite, player, position);
     this.damageBox = { x: sprite.offsetX, y: sprite.offsetY };
     this.damageBoxAttacking = { x: sprite.offsetX - 50, y: sprite.offsetY };
-    this.speed = 1;
+    this.speed = 0.5;
     this.damageAmount = 21;
   }
 }

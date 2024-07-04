@@ -13,22 +13,22 @@ const levelSettings = {
   foreground: "./assets/img/level3/mapLevel3Foreground.png",
   background: "./assets/img/bg.png",
   clouds: "./assets/img/clouds.png",
-  startPointX: 1050,
-  startPointY: 1200,
+  startPointX: 525,
+  startPointY: 600,
   maxPoints: 10,
   minArrows: 50,
 };
 
 export class Level3 extends Level {
-  pepePosition = { x: 1990, y: 1012 };
-  bossData = { x: 2820, y: 1050, walkRoute: 400 };
+  pepePosition = { x: 995, y: 506 };
+  bossData = { x: 1410, y: 525, walkRoute: 200 };
   doorOpen = false;
 
   constructor() {
     super(levelSettings);
 
     this.pepe = new Pepe(pepeSprite, this.player, this, this.pepePosition);
-    this.pepe.targetX = this.pepe.position.x + 5;
+    this.pepe.targetX = this.pepe.position.x + 2.5;
     this.boss = new Boss(bossSprite, this.player, this.bossData);
     this.enemies = [this.boss];
     this.collisionDetector = new CollisionDetector(this.mapData, this.player);

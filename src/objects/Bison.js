@@ -5,7 +5,7 @@ export class Bison extends Enemy {
     super(sprite, player, position);
     this.damageBox = { x: sprite.offsetX, y: sprite.offsetY };
     this.damageBoxAttacking = { x: sprite.offsetX - 50, y: sprite.offsetY };
-    this.speed = 5;
+    this.speed = 2.5;
     this.damageAmount = 24;
   }
 }

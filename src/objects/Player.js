@@ -11,19 +11,19 @@ export class Player extends MoveableObject {
       Player[dataSymbol] = { health: 100, points: 0, arrows: 5 };
     }
     this.data = Player[dataSymbol];
-    this.jumpHeight = 300;
-    this.speed = 8;
+    this.jumpHeight = 150;
+    this.speed = 4;
     this.jumpSpeed = null;
     this.canJump = true;
-    this.fallSpeed = 0.4;
-    this.jumpAcceleration = 0.6;
-    this.fallAcceleration = 0.5;
-    this.totalJump = 300;
+    this.fallSpeed = 0.2;
+    this.jumpAcceleration = 0.3;
+    this.fallAcceleration = 0.25;
+    this.totalJump = 150;
     this.isOnGround = true;
     this.isFalling = false;
     this.isAttacking = false;
     this.isShooting = false;
-    this.climbSpeed = 10;
+    this.climbSpeed = 5;
     this.isClimbing = false;
     this.canUseLadder = false;
     this.isTakeDamage = false;
@@ -51,8 +51,8 @@ export class Player extends MoveableObject {
   jump() {
     if (this.isOnGround) {
       this.totalJump = 0;
-      this.jumpSpeed = 20;
-      this.fallSpeed = 0.4;
+      this.jumpSpeed = 10;
+      this.fallSpeed = 0.2;
       this.animation(this.sprite.jumping);
     }
   }
@@ -162,7 +162,7 @@ export class Player extends MoveableObject {
       this.isClimbing = true;
     } else if (!pressedKeys.up && this.isClimbing) {
       this.isClimbing = false;
-      this.fallSpeed = 1;
+      this.fallSpeed = 0.5;
     }
     if (!this.isOnGround) {
       this.isFalling = true;
@@ -170,7 +170,7 @@ export class Player extends MoveableObject {
 
     if (this.isClimbing && this.canUseLadder) {
       this.fallSpeed = 0;
-      this.totalJump = 500;
+      this.totalJump = 250;
       this.isFalling = false;
       this.position.y -= this.climbSpeed;
       this.canUseLadder = false;
@@ -208,7 +208,7 @@ export class Player extends MoveableObject {
   }
 
   handleDead() {
-    if (this.position.y > 1550 && !this.restart) {
+    if (this.position.y > 775 && !this.restart) {
       this.isOnGround = true;
       this.data.health = 0;
     }
