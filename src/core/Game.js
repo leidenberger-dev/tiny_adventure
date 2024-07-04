@@ -23,8 +23,8 @@ export class Game {
     this.soundsPlaying = {};
     this.loadLevel().then(() => {
       this.renderer = new Renderer(this.level);
-      this.isLoadingLevel = false;
       this.start();
+      this.isLoadingLevel = false;
     });
   }
 
@@ -38,11 +38,15 @@ export class Game {
     if (deltaTime >= this.targetFrameTime) {
       this.lastFrameTime = timestamp - (deltaTime % this.targetFrameTime);
 
-      if (!this.isLoadingLevel) {
+      this.renderer.gui.checkLandscape();
+      if (this.noLandscapeOnDevice && this.renderer.gui.startScreen) {
+        this.renderer.gui.drawTurnDevice();
+      }
+      if (!this.isLoadingLevel && !this.noLandscapeOnDevice()) {
         this.handleLevelReset();
         this.handleMusic();
-        this.handlePause();
         this.updateVolume();
+        this.handlePause();
         this.renderer.draw();
         this.handleNextLevel();
       }
@@ -89,8 +93,8 @@ export class Game {
       this.renderer.gui.pointsbar.column = 0;
       await this.loadLevel().then(() => {
         this.renderer = new Renderer(this.level, guiSettings);
-        this.isLoadingLevel = false;
         this.start();
+        this.isLoadingLevel = false;
       });
     }
   }
@@ -129,5 +133,9 @@ export class Game {
     } else {
       if (this.musicSound) this.musicSound.muted = false;
     }
+  }
+
+  noLandscapeOnDevice() {
+    return !this.renderer.gui.landscape && this.renderer.gui.touchScreen;
   }
 }
